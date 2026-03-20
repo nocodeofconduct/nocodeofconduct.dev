@@ -1,0 +1,51 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "prettier.requireConfig": true,
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.prettierPath": "./node_modules/prettier",
+  "biome.requireConfiguration": true,
+  "emmet.includeLanguages": {
+    "astro": "html"
+  },
+  "search.exclude": {
+    "**/.astro": true,
+    "**/dist": true
+  },
+  "files.watcherExclude": {
+    "**/.astro/**": true,
+    "**/dist/**": true
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
+}
