@@ -6,6 +6,8 @@ import {
   ShieldCheckIcon,
 } from "@primer/octicons-react";
 
+import { siteConfig } from "../config/site";
+
 const { Grid, Hero, Label, Pillar, Section, SectionIntro, Stack, Text, ThemeProvider } =
   PrimerBrand as typeof import("@primer/react-brand");
 
@@ -170,7 +172,7 @@ export default function NoCodeOfConductLanding() {
             No Code of Conduct
           </Text>
           <Text as="p" size="100" variant="muted">
-            Built with Bun, Astro, Primer Brand UI, and deployed via GitHub Pages.
+            {siteConfig.footerNote}
           </Text>
         </footer>
       </main>

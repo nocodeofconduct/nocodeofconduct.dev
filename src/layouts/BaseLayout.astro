@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { siteConfig } from "../config/site";
 
 interface Props {
   title?: string;
@@ -7,11 +8,11 @@ interface Props {
 }
 
 const {
-  title = "No Code of Conduct",
-  description = "Contributions will be judged by their technical merit.",
+  title = siteConfig.name,
+  description = siteConfig.description,
 } = Astro.props;
 
-const site = Astro.site ?? new URL("https://nocodeofconduct.dev");
+const site = Astro.site ?? new URL(siteConfig.url);
 const canonical = new URL(Astro.url.pathname, site);
 ---
 
@@ -27,6 +28,7 @@ const canonical = new URL(Astro.url.pathname, site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

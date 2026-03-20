@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "postbuild": "bun ./scripts/verify-dist.ts",
+    "verify:dist": "bun ./scripts/verify-dist.ts",
+    "test": "bun test"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.1",

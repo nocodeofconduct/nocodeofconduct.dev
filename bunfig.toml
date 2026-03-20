@@ -1,2 +1,10 @@
-[serve.static]
-env = "BUN_PUBLIC_*"
+telemetry = false
+
+[install]
+auto = "disable"
+
+[run]
+bun = true
+
+[test]
+pathIgnorePatterns = ["dist/**", ".astro/**"]

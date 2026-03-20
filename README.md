@@ -16,16 +16,22 @@ Start the Astro dev server:
 bun run dev
 ```
 
+Run the test suite:
+
+```bash
+bun run test
+```
+
 Build the static site:
 
 ```bash
 bun run build
 ```
 
+The build verifies the generated `dist/` output afterward using Bun-native file I/O and globbing.
+
 Preview the production build locally:
 
 ```bash
 bun run preview
 ```
-
-The GitHub Pages deployment workflow publishes the `dist/` output and ships a `CNAME` for `nocodeofconduct.dev`.
