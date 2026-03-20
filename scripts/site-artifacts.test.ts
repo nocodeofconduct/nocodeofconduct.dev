@@ -16,7 +16,7 @@ async function makeTempRepo() {
 
 afterEach(async () => {
   await Promise.all(
-    tempDirs.splice(0).map(dir =>
+    tempDirs.splice(0).map((dir) =>
       rm(dir, {
         force: true,
         recursive: true,
@@ -74,6 +74,10 @@ test("verifyDist reports missing canonical metadata", async () => {
   const result = await verifyDist(rootDir);
 
   expect(result.ok).toBe(false);
-  expect(result.errors).toContain("dist/index.html is missing the expected canonical URL.");
-  expect(result.errors).toContain("dist/index.html is missing the expected Open Graph URL.");
+  expect(result.errors).toContain(
+    "dist/index.html is missing the expected canonical URL.",
+  );
+  expect(result.errors).toContain(
+    "dist/index.html is missing the expected Open Graph URL.",
+  );
 });

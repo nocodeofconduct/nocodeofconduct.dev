@@ -8,8 +8,17 @@ import {
 
 import { siteConfig } from "../config/site";
 
-const { Grid, Hero, Label, Pillar, Section, SectionIntro, Stack, Text, ThemeProvider } =
-  PrimerBrand as typeof import("@primer/react-brand");
+const {
+  Grid,
+  Hero,
+  Label,
+  Pillar,
+  Section,
+  SectionIntro,
+  Stack,
+  Text,
+  ThemeProvider,
+} = PrimerBrand as typeof import("@primer/react-brand");
 
 const principles = [
   {
@@ -44,7 +53,12 @@ function MeritBoard() {
           <span />
           <span />
         </div>
-        <Text as="span" size="100" font="monospace" className="merit-board__filename">
+        <Text
+          as="span"
+          size="100"
+          font="monospace"
+          className="merit-board__filename"
+        >
           filter.diff
         </Text>
       </div>
@@ -84,7 +98,10 @@ export default function NoCodeOfConductLanding() {
     <ThemeProvider colorMode="light">
       <main className="landing">
         <div className="landing__halo landing__halo--blue" aria-hidden="true" />
-        <div className="landing__halo landing__halo--green" aria-hidden="true" />
+        <div
+          className="landing__halo landing__halo--green"
+          aria-hidden="true"
+        />
 
         <Section
           className="landing__hero-wrap"
@@ -98,7 +115,11 @@ export default function NoCodeOfConductLanding() {
             trailingComponent={MeritBoard}
           >
             <Hero.Eyebrow className="landing__eyebrow">
-              <Label color="green-blue" size="large" leadingVisual={ChecklistIcon}>
+              <Label
+                color="green-blue"
+                size="large"
+                leadingVisual={ChecklistIcon}
+              >
                 No Code of Conduct
               </Label>
             </Hero.Eyebrow>
@@ -108,8 +129,8 @@ export default function NoCodeOfConductLanding() {
             </Hero.Heading>
 
             <Hero.Description className="landing__description" size="500">
-              No loyalty tests. No symbolic bureaucracy. Just correctness, clarity, and
-              maintainability.
+              No loyalty tests. No symbolic bureaucracy. Just correctness,
+              clarity, and maintainability.
             </Hero.Description>
 
             <Stack
@@ -147,20 +168,25 @@ export default function NoCodeOfConductLanding() {
               Merit is explicit.
             </SectionIntro.Heading>
             <SectionIntro.Description>
-              If a contribution is stronger on these three dimensions, it deserves a serious
-              review. Everything else is noise.
+              If a contribution is stronger on these three dimensions, it
+              deserves a serious review. Everything else is noise.
             </SectionIntro.Description>
           </SectionIntro>
 
           <Grid className="landing__grid">
-            {principles.map(principle => (
-              <Grid.Column key={principle.title} span={{ small: 12, medium: 4 }}>
+            {principles.map((principle) => (
+              <Grid.Column
+                key={principle.title}
+                span={{ small: 12, medium: 4 }}
+              >
                 <Pillar className="landing__pillar" hasBorder align="start">
                   <Pillar.Icon icon={principle.icon} color={principle.color} />
                   <Pillar.Heading as="h3" size="5">
                     {principle.title}
                   </Pillar.Heading>
-                  <Pillar.Description>{principle.description}</Pillar.Description>
+                  <Pillar.Description>
+                    {principle.description}
+                  </Pillar.Description>
                 </Pillar>
               </Grid.Column>
             ))}

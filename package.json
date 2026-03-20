@@ -8,6 +8,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "fmt": "bun run fmt:biome && bun run fmt:astro",
+    "fmt:check": "bun run fmt:check:biome && bun run fmt:check:astro",
+    "fmt:biome": "biome format --write .",
+    "fmt:check:biome": "biome format .",
+    "fmt:astro": "prettier --write \"src/**/*.astro\"",
+    "fmt:check:astro": "prettier --check \"src/**/*.astro\"",
     "postbuild": "bun ./scripts/verify-dist.ts",
     "verify:dist": "bun ./scripts/verify-dist.ts",
     "test": "bun test"
@@ -22,9 +30,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
+    "@biomejs/biome": "2.4.8",
     "@types/bun": "latest",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "prettier": "3.8.1",
+    "prettier-plugin-astro": "0.14.1",
     "typescript": "^5.9.3"
   }
 }

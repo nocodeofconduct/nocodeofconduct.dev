@@ -28,7 +28,9 @@ export type DistVerificationResult = {
   ok: boolean;
 };
 
-export async function verifyDist(rootDir = process.cwd()): Promise<DistVerificationResult> {
+export async function verifyDist(
+  rootDir = process.cwd(),
+): Promise<DistVerificationResult> {
   const { distIndexPath } = getPaths(rootDir);
   const files = await listDistFiles(rootDir).catch(() => [] as string[]);
   const errors: string[] = [];
@@ -37,7 +39,7 @@ export async function verifyDist(rootDir = process.cwd()): Promise<DistVerificat
     errors.push("dist/index.html is missing.");
   }
 
-  if (!files.some(file => file.startsWith("_astro/"))) {
+  if (!files.some((file) => file.startsWith("_astro/"))) {
     errors.push("dist/_astro is missing hashed build assets.");
   }
 
@@ -50,7 +52,9 @@ export async function verifyDist(rootDir = process.cwd()): Promise<DistVerificat
     }
 
     if (!html.includes(`content="${siteConfig.description}"`)) {
-      errors.push("dist/index.html is missing the shared description metadata.");
+      errors.push(
+        "dist/index.html is missing the shared description metadata.",
+      );
     }
 
     if (!html.includes(`href="${homeCanonicalUrl}"`)) {
