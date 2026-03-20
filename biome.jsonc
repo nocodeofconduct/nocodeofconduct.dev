@@ -19,6 +19,9 @@
       "recommended": true
     }
   },
+  "html": {
+    "experimentalFullSupportEnabled": true
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double"
@@ -31,13 +34,5 @@
         "organizeImports": "on"
       }
     }
-  },
-  "overrides": [
-    {
-      "includes": ["**/*.astro"],
-      "linter": {
-        "enabled": false
-      }
-    }
-  ]
+  }
 }
