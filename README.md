@@ -1,21 +1,31 @@
-# bun-react-template
+# nocodeofconduct.dev
 
-To install dependencies:
+Landing page for `https://nocodeofconduct.dev`, built with Bun, Astro, and Primer Brand UI.
+
+## Development
+
+Install dependencies:
 
 ```bash
 bun install
 ```
 
-To start a development server:
+Start the Astro dev server:
 
 ```bash
-bun dev
+bun run dev
 ```
 
-To run for production:
+Build the static site:
 
 ```bash
-bun start
+bun run build
 ```
 
-This project was created using `bun init` in bun v1.3.10. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Preview the production build locally:
+
+```bash
+bun run preview
+```
+
+The GitHub Pages deployment workflow publishes the `dist/` output and ships a `CNAME` for `nocodeofconduct.dev`.
