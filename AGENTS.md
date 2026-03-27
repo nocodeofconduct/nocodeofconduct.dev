@@ -1,7 +1,17 @@
-All changes must be tested: if you are re not testing your changes, you are not
+All changes must be tested: if you are not testing your changes, you are not
 done. Be humble and honest: NEVER overstate what you got done or what actually
 works in commits, PRs or in messages to the user. When you are done, signal
 completion by singing `Tirelipimpon sur le chihuahua`.
+
+Prefer small, testable patches over one giant rewrite when the worktree is dirty
+or package-manager side effects are still settling.
+
+If you touch tooling, CI, test setup, or build verification, validate both the
+local and CI-oriented paths before claiming success. In this repo that usually
+means `bun run quality`, `bun run quality:ci`, and `bun run build`.
+
+If `bun audit` still reports upstream transitive vulnerabilities, say so plainly
+and do not imply they were fixed just because the rest of the patch is green.
 
 Default to using Bun instead of Node.js.
 
@@ -27,6 +37,9 @@ Default to using Bun instead of Node.js.
 ## Testing
 
 Use `bun test` to run tests.
+
+If you change test setup, coverage, or reporters, also run the relevant Bun
+flows such as `bun run test:coverage` and `bun run quality:ci`.
 
 ```ts#index.test.ts
 import { test, expect } from "bun:test";
@@ -77,6 +90,10 @@ Bun.serve({
 HTML files can import .tsx, .jsx or .js files directly and Bun's bundler will
 transpile & bundle automatically. `<link>` tags can point to stylesheets and
 Bun's CSS bundler will bundle.
+
+If the page is a manifesto, essay, or cultural statement, do not default to
+product-marketing tropes. Prefer editorial hierarchy, clear thesis, and a visual
+language that feels self-possessed rather than sales-driven.
 
 ```html#index.html
 <html>

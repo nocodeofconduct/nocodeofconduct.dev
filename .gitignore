@@ -10,6 +10,7 @@ dist
 # code coverage
 coverage
 *.lcov
+reports
 
 # logs
 logs

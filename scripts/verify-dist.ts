@@ -1,13 +1,38 @@
 import { verifyDist } from "./site-artifacts";
 
-const result = await verifyDist();
+type RunVerifyDistOptions = {
+  error?: (message?: unknown, ...optionalParams: unknown[]) => void;
+  exit?: (code?: number) => undefined | never;
+  log?: (message?: unknown, ...optionalParams: unknown[]) => void;
+  verify?: typeof verifyDist;
+};
 
-if (!result.ok) {
-  for (const error of result.errors) {
-    console.error(error);
+export async function runVerifyDist({
+  verify = verifyDist,
+  log = console.log,
+  error = console.error,
+  exit = process.exit,
+}: RunVerifyDistOptions = {}) {
+  const result = await verify();
+
+  if (!result.ok) {
+    for (const message of result.errors) {
+      error(message);
+    }
+
+    exit(1);
+    return result;
   }
 
-  process.exit(1);
+  log(
+    `Verified dist output (${result.files.length} files, ${result.assetReferences.length} asset references, hash ${
+      result.indexHash ?? "n/a"
+    }).`,
+  );
+
+  return result;
 }
 
-console.log(`Verified dist output (${result.files.length} files).`);
+if (import.meta.main) {
+  await runVerifyDist();
+}

@@ -22,14 +22,18 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Type check
-        run: bun run check
+      - name: Quality sweep
+        run: bun run quality:ci
 
-      - name: Lint
-        run: bun run lint
+      - name: Dependency audit
+        if: always()
+        continue-on-error: true
+        run: bun run audit
 
-      - name: Format check
-        run: bun run fmt:check
-
-      - name: Test
-        run: bun test
+      - name: Upload Bun reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bun-reports
+          path: reports
+          if-no-files-found: ignore

@@ -8,87 +8,113 @@ import {
 
 import { siteConfig } from "../config/site";
 
-const {
-  Grid,
-  Hero,
-  Label,
-  Pillar,
-  Section,
-  SectionIntro,
-  Stack,
-  Text,
-  ThemeProvider,
-} = PrimerBrand as typeof import("@primer/react-brand");
+const { Grid, Hero, Label, Section, SectionIntro, Stack, Text, ThemeProvider } =
+  PrimerBrand as typeof import("@primer/react-brand");
 
-const principles = [
+const articles = [
   {
-    color: "blue" as const,
     icon: <ShieldCheckIcon size={24} aria-hidden="true" />,
-    title: "Correctness",
+    title: "Assume competence",
     description:
-      "Does the change solve the stated problem without introducing a worse one?",
+      "Start from peerhood, not suspicion. Adults deserve context, candor, and room to correct course.",
   },
   {
-    color: "green" as const,
     icon: <CodeReviewIcon size={24} aria-hidden="true" />,
-    title: "Clarity",
+    title: "Speak plainly",
     description:
-      "Can another maintainer read the diff, follow the reasoning, and verify the tradeoff?",
+      "Name technical and interpersonal problems directly. Vague politeness is often just deferred conflict.",
   },
   {
-    color: "orange" as const,
     icon: <GitPullRequestIcon size={24} aria-hidden="true" />,
-    title: "Maintainability",
+    title: "Repair quickly",
     description:
-      "Will this still look like a good idea after the novelty is gone and the pager goes off?",
+      "When someone crosses a line, respond proportionally, make repair visible, and turn folklore into agreement.",
+  },
+  {
+    icon: <ChecklistIcon size={24} aria-hidden="true" />,
+    title: "Share stewardship",
+    description:
+      "Everyone protects the codebase, the working relationship, and the conditions that let serious work continue.",
   },
 ];
 
-function MeritBoard() {
+const refusals = [
+  "symbolic compliance in place of judgment",
+  "ideological slogans during technical disagreement",
+  "managerial theater pretending to be care",
+  "rules nobody can interpret without an authority figure",
+] as const;
+
+const protections = [
+  "direct feedback without humiliation",
+  "proportionate consequences when trust is broken",
+  "visible repair instead of silent resentment",
+  "a culture contributors can genuinely co-own",
+] as const;
+
+const workingAgreement = [
+  "Say what the problem is.",
+  "Assume the other person can hear it.",
+  "Repair damage when it happens.",
+  "Protect the work and the relationship together.",
+] as const;
+
+function GovernanceSheet() {
   return (
-    <aside className="merit-board" aria-label="Technical merit review filter">
-      <div className="merit-board__chrome">
-        <div className="merit-board__lights" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
+    <aside
+      className="governance-sheet"
+      aria-label="Working agreement for adult self-governance"
+    >
+      <div className="governance-sheet__header">
         <Text
           as="span"
           size="100"
           font="monospace"
-          className="merit-board__filename"
+          className="governance-sheet__kicker"
         >
-          filter.diff
+          Working Agreement
+        </Text>
+        <Text
+          as="span"
+          size="100"
+          font="monospace"
+          className="governance-sheet__meta"
+        >
+          SELF-GOVERNED
         </Text>
       </div>
-      <div className="merit-board__body">
-        <div className="merit-board__line merit-board__line--plus">
-          <span className="merit-board__marker">+</span>
-          <span>correctness</span>
-        </div>
-        <div className="merit-board__line merit-board__line--plus">
-          <span className="merit-board__marker">+</span>
-          <span>clarity</span>
-        </div>
-        <div className="merit-board__line merit-board__line--plus">
-          <span className="merit-board__marker">+</span>
-          <span>maintainability</span>
-        </div>
-        <div className="merit-board__line merit-board__line--minus">
-          <span className="merit-board__marker">-</span>
-          <span>ritual</span>
-        </div>
-        <div className="merit-board__line merit-board__line--minus">
-          <span className="merit-board__marker">-</span>
-          <span>posture</span>
-        </div>
-        <div className="merit-board__line merit-board__line--minus">
-          <span className="merit-board__marker">-</span>
-          <span>ideology</span>
-        </div>
+      <Text as="p" size="300" className="governance-sheet__intro">
+        A real code of conduct assumes judgment. It names obligations without
+        outsourcing adulthood.
+      </Text>
+      <div className="governance-sheet__body">
+        {workingAgreement.map((line, index) => (
+          <div key={line} className="governance-sheet__row">
+            <Text
+              as="span"
+              size="100"
+              font="monospace"
+              className="governance-sheet__index"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </Text>
+            <Text as="p" size="200" className="governance-sheet__line">
+              {line}
+            </Text>
+          </div>
+        ))}
       </div>
-      <div className="merit-board__stamp">TECHNICAL MERIT</div>
+      <div className="governance-sheet__footer">
+        <span className="governance-sheet__signature-line" aria-hidden="true" />
+        <Text
+          as="span"
+          size="100"
+          font="monospace"
+          className="governance-sheet__signature"
+        >
+          maintained by adults, not ceremony
+        </Text>
+      </div>
     </aside>
   );
 }
@@ -112,26 +138,29 @@ export default function NoCodeOfConductLanding() {
             align="start"
             variant="gridline-expressive"
             className="landing__hero"
-            trailingComponent={MeritBoard}
+            trailingComponent={GovernanceSheet}
           >
             <Hero.Eyebrow className="landing__eyebrow">
-              <Label
-                color="green-blue"
-                size="large"
-                leadingVisual={ChecklistIcon}
-              >
+              <Label color="blue" size="large" leadingVisual={ChecklistIcon}>
                 No Code of Conduct
               </Label>
             </Hero.Eyebrow>
 
             <Hero.Heading className="landing__heading" size="display">
-              Contributions will be judged by their technical merit.
+              A code of conduct adults can own.
             </Hero.Heading>
 
             <Hero.Description className="landing__description" size="500">
-              No loyalty tests. No symbolic bureaucracy. Just correctness,
-              clarity, and maintainability.
+              No slogans, no loyalty theater, no paternalistic scripts. Healthy
+              technical communities can state expectations plainly, enforce them
+              proportionally, and repair harm in the open.
             </Hero.Description>
+
+            <Text as="p" size="300" className="landing__lede">
+              The point is not the absence of norms. It is the presence of norms
+              serious enough to be interpreted, upheld, and revised by the
+              people doing the work.
+            </Text>
 
             <Stack
               className="landing__signals"
@@ -139,15 +168,15 @@ export default function NoCodeOfConductLanding() {
               gap="condensed"
               flexWrap="wrap"
             >
-              <Label color="blue" size="large">
-                Correctness
-              </Label>
-              <Label color="green" size="large">
-                Clarity
-              </Label>
-              <Label color="orange" size="large">
-                Maintainability
-              </Label>
+              <Text as="span" size="200" className="landing__signal">
+                direct speech
+              </Text>
+              <Text as="span" size="200" className="landing__signal">
+                reciprocal respect
+              </Text>
+              <Text as="span" size="200" className="landing__signal">
+                repair over ritual
+              </Text>
             </Stack>
           </Hero>
         </Section>
@@ -162,34 +191,102 @@ export default function NoCodeOfConductLanding() {
         >
           <SectionIntro className="landing__section-intro" align="start">
             <SectionIntro.Label color="blue" size="large">
-              The Filter
+              Adult Code
             </SectionIntro.Label>
             <SectionIntro.Heading as="h2" size="2">
-              Merit is explicit.
+              Four articles for a self-governed team.
             </SectionIntro.Heading>
             <SectionIntro.Description>
-              If a contribution is stronger on these three dimensions, it
-              deserves a serious review. Everything else is noise.
+              A serious code can fit on one page because it assumes judgment,
+              context, and reciprocal obligation instead of ritual performance.
             </SectionIntro.Description>
           </SectionIntro>
 
-          <Grid className="landing__grid">
-            {principles.map((principle) => (
-              <Grid.Column
-                key={principle.title}
-                span={{ small: 12, medium: 4 }}
-              >
-                <Pillar className="landing__pillar" hasBorder align="start">
-                  <Pillar.Icon icon={principle.icon} color={principle.color} />
-                  <Pillar.Heading as="h3" size="5">
-                    {principle.title}
-                  </Pillar.Heading>
-                  <Pillar.Description>
-                    {principle.description}
-                  </Pillar.Description>
-                </Pillar>
-              </Grid.Column>
+          <div className="landing__articles">
+            {articles.map((article, index) => (
+              <article key={article.title} className="article-card">
+                <div className="article-card__header">
+                  <span className="article-card__icon" aria-hidden="true">
+                    {article.icon}
+                  </span>
+                  <Text
+                    as="span"
+                    size="100"
+                    font="monospace"
+                    className="article-card__eyebrow"
+                  >
+                    Article {index + 1}
+                  </Text>
+                </div>
+                <h3 className="article-card__title">{article.title}</h3>
+                <Text as="p" size="200" className="article-card__description">
+                  {article.description}
+                </Text>
+              </article>
             ))}
+          </div>
+        </Section>
+
+        <Section
+          as="section"
+          className="landing__stances"
+          paddingBlockStart={{ narrow: "normal", regular: "spacious" }}
+          paddingBlockEnd={{ narrow: "normal", regular: "spacious" }}
+        >
+          <SectionIntro className="landing__section-intro" align="start">
+            <SectionIntro.Label color="green" size="large">
+              No Ritual
+            </SectionIntro.Label>
+            <SectionIntro.Heading as="h2" size="2">
+              What this refuses and what it protects.
+            </SectionIntro.Heading>
+            <SectionIntro.Description>
+              “No Code of Conduct” is not a shrug. It is a refusal to replace
+              adult responsibility with ceremony, while keeping the obligations
+              that make collaboration livable.
+            </SectionIntro.Description>
+          </SectionIntro>
+
+          <Grid className="landing__stance-grid">
+            <Grid.Column span={{ small: 12, medium: 6 }}>
+              <article className="stance-card">
+                <Text
+                  as="span"
+                  size="100"
+                  font="monospace"
+                  className="stance-card__eyebrow"
+                >
+                  Refuses
+                </Text>
+                <h3 className="stance-card__title">No symbolic adulthood.</h3>
+                <ul className="stance-card__list">
+                  {refusals.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            </Grid.Column>
+
+            <Grid.Column span={{ small: 12, medium: 6 }}>
+              <article className="stance-card stance-card--affirmative">
+                <Text
+                  as="span"
+                  size="100"
+                  font="monospace"
+                  className="stance-card__eyebrow"
+                >
+                  Protects
+                </Text>
+                <h3 className="stance-card__title">
+                  A culture people can co-own.
+                </h3>
+                <ul className="stance-card__list">
+                  {protections.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            </Grid.Column>
           </Grid>
         </Section>
 

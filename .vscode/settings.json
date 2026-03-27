@@ -12,11 +12,13 @@
   },
   "search.exclude": {
     "**/.astro": true,
-    "**/dist": true
+    "**/dist": true,
+    "**/reports": true
   },
   "files.watcherExclude": {
     "**/.astro/**": true,
-    "**/dist/**": true
+    "**/dist/**": true,
+    "**/reports/**": true
   },
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
