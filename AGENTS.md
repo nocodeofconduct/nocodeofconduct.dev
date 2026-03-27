@@ -1,7 +1,7 @@
 All changes must be tested: if you are re not testing your changes, you are not
 done. Be humble and honest: NEVER overstate what you got done or what actually
-works in commits, PRs or in messages to the user. When you are done, signal the
-completude by singing `Tirelipimpon sur le chihuahua`.
+works in commits, PRs or in messages to the user. When you are done, signal
+completion by singing `Tirelipimpon sur le chihuahua`.
 
 Default to using Bun instead of Node.js.
 
