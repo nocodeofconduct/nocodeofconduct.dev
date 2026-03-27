@@ -58,6 +58,7 @@ function extractAssetReferences(html: string) {
 
     if (
       rawReference === "/favicon.svg" ||
+      rawReference.startsWith("/_astro/") ||
       rawReference.startsWith("/_assets/")
     ) {
       references.add(rawReference.slice(1));
@@ -92,9 +93,13 @@ export async function verifyDist(
   }
 
   if (
-    !files.some((file) => file.startsWith("_assets/") && file.endsWith(".css"))
+    !files.some(
+      (file) =>
+        (file.startsWith("_astro/") || file.startsWith("_assets/")) &&
+        file.endsWith(".css"),
+    )
   ) {
-    errors.push("dist/_assets is missing expected stylesheet assets.");
+    errors.push("dist is missing expected generated stylesheet assets.");
   }
 
   for (const publicFile of publicFiles) {
@@ -189,8 +194,14 @@ export async function verifyDist(
       errors.push("dist/index.html is missing the expected favicon reference.");
     }
 
-    if (!assetReferences.some((file) => file.startsWith("_assets/"))) {
-      errors.push("dist/index.html is missing referenced _assets stylesheets.");
+    if (
+      !assetReferences.some(
+        (file) => file.startsWith("_astro/") || file.startsWith("_assets/"),
+      )
+    ) {
+      errors.push(
+        "dist/index.html is missing referenced generated stylesheet assets.",
+      );
     }
 
     for (const assetReference of assetReferences) {

@@ -19,10 +19,12 @@ async function makeTempRepo() {
 }
 
 async function writeDistFixture(rootDir: string, html: string) {
-  await mkdir(join(rootDir, "dist", "_assets"), { recursive: true });
+  await mkdir(join(rootDir, "dist", "_astro"), { recursive: true });
   await mkdir(join(rootDir, "public"), { recursive: true });
-  await Bun.write(join(rootDir, "dist", "_assets", "antd.css"), "body{}");
-  await Bun.write(join(rootDir, "dist", "_assets", "global.css"), "html{}");
+  await Bun.write(
+    join(rootDir, "dist", "_astro", "index.abc123.css"),
+    "body{}",
+  );
   await Bun.write(join(rootDir, "dist", "favicon.svg"), "<svg></svg>");
   await Bun.write(join(rootDir, "public", "CNAME"), "nocodeofconduct.dev");
   await Bun.write(join(rootDir, "dist", "CNAME"), "nocodeofconduct.dev");
@@ -62,8 +64,7 @@ test("verifyDist passes for a build with the expected site metadata", async () =
       `<meta name="theme-color" content="${siteThemeColor}" />`,
       `<link rel="canonical" href="${homeCanonicalUrl}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_assets/antd.css" />',
-      '<link rel="stylesheet" href="/_assets/global.css" />',
+      '<link rel="stylesheet" href="/_astro/index.abc123.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -75,8 +76,7 @@ test("verifyDist passes for a build with the expected site metadata", async () =
   expect(result.ok).toBe(true);
   expect(result.errors).toEqual([]);
   expect(result.assetReferences).toEqual([
-    "_assets/antd.css",
-    "_assets/global.css",
+    "_astro/index.abc123.css",
     "favicon.svg",
   ]);
   expect(result.indexHash).toBeTruthy();
@@ -102,8 +102,7 @@ test("verifyDist reports missing canonical metadata", async () => {
       '<meta name="twitter:card" content="summary_large_image" />',
       `<meta name="theme-color" content="${siteThemeColor}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_assets/antd.css" />',
-      '<link rel="stylesheet" href="/_assets/global.css" />',
+      '<link rel="stylesheet" href="/_astro/index.abc123.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -143,7 +142,7 @@ test("verifyDist reports missing referenced assets", async () => {
       `<meta name="theme-color" content="${siteThemeColor}" />`,
       `<link rel="canonical" href="${homeCanonicalUrl}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_assets/missing.css" />',
+      '<link rel="stylesheet" href="/_astro/missing.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -154,7 +153,7 @@ test("verifyDist reports missing referenced assets", async () => {
 
   expect(result.ok).toBe(false);
   expect(result.errors).toContain(
-    "dist/_assets/missing.css is referenced from dist/index.html but missing.",
+    "dist/_astro/missing.css is referenced from dist/index.html but missing.",
   );
 });
 
@@ -180,8 +179,7 @@ test("verifyDist reports missing copied public assets", async () => {
       `<meta name="theme-color" content="${siteThemeColor}" />`,
       `<link rel="canonical" href="${homeCanonicalUrl}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_assets/antd.css" />',
-      '<link rel="stylesheet" href="/_assets/global.css" />',
+      '<link rel="stylesheet" href="/_astro/index.abc123.css" />',
       "</head>",
       "<body></body>",
       "</html>",

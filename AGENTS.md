@@ -26,21 +26,21 @@ Default to using Bun instead of Node.js.
 
 ## Project Notes
 
-- This repo is a custom Bun static site generator now. Do not reintroduce Astro,
-  Vite, or another framework build pipeline unless the user explicitly asks for
-  that migration.
-- The HTML shell is rendered in `src/render-site.tsx` with `react-dom/server`.
-  Prefer keeping the site static and script-free unless the user asks for
-  client-side interactivity.
-- `scripts/site-runtime.ts` is the source of truth for build/dev/preview. If you
-  touch it, preserve copied `public/**` assets, especially `CNAME` and
-  `favicon.svg`.
+- This repo now uses Astro for static site generation, with React components
+  rendered server-side at build time. Do not reintroduce the old custom Bun
+  renderer unless the user explicitly asks for it.
+- The document shell lives in `src/layouts/BaseLayout.astro`, and the page
+  entrypoint is `src/pages/index.astro`. Prefer keeping the site static and
+  script-free unless the user asks for client-side interactivity.
+- `bun run dev`, `bun run build`, and `bun run preview` are the source of truth
+  for the local Astro workflow. Preserve copied `public/**` assets, especially
+  `CNAME` and `favicon.svg`.
 - The generated `dist/index.html` is expected to keep canonical, Open Graph,
   Twitter, and theme-color metadata, and should not grow unexpected `<script>`
   tags without a deliberate product decision.
-- For now, Ant Design CSS is copied into `dist/_assets/antd.css` instead of
-  being rebundled by Bun's CSS pipeline. Do not switch that back casually
-  without re-testing the full build output.
+- Ant Design CSS is now bundled into Astro's generated stylesheet assets under
+  `dist/_astro/**`. Do not change that casually without re-testing the full
+  build output.
 
 ## APIs
 
@@ -69,45 +69,36 @@ test("hello world", () => {
 
 ## Frontend
 
-Use HTML imports with `Bun.serve()`. Don't use `vite`. HTML imports fully
-support React, CSS, Tailwind.
+Use Astro pages and layouts for the static shell, and React components for the
+page content. Do not add `client:*` hydration directives unless the user asks
+for real client-side interactivity.
 
-Server:
+Basic structure:
 
-```ts#index.ts
-import index from "./index.html"
+```astro#src/pages/index.astro
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NoCodeOfConductLanding from "../components/NoCodeOfConductLanding";
+---
 
-Bun.serve({
-  routes: {
-    "/": index,
-    "/api/users/:id": {
-      GET: (req) => {
-        return new Response(JSON.stringify({ id: req.params.id }));
-      },
-    },
-  },
-  // optional websocket support
-  websocket: {
-    open: (ws) => {
-      ws.send("Hello, world!");
-    },
-    message: (ws, message) => {
-      ws.send(message);
-    },
-    close: (ws) => {
-      // handle close
-    }
-  },
-  development: {
-    hmr: true,
-    console: true,
-  }
-})
+<BaseLayout>
+  <NoCodeOfConductLanding />
+</BaseLayout>
 ```
 
-HTML files can import .tsx, .jsx or .js files directly and Bun's bundler will
-transpile & bundle automatically. `<link>` tags can point to stylesheets and
-Bun's CSS bundler will bundle.
+```tsx#src/components/NoCodeOfConductLanding.tsx
+import { ConfigProvider } from "antd";
+
+export default function NoCodeOfConductLanding() {
+  return <ConfigProvider>{/* static React content */}</ConfigProvider>;
+}
+```
+
+Run Astro through Bun scripts:
+
+```sh
+bun run dev
+```
 
 If the page is a manifesto, essay, or cultural statement, do not default to
 product-marketing tropes. Prefer editorial hierarchy, clear thesis, and a visual
@@ -117,39 +108,6 @@ If the repo uses Ant Design, use Ant Design faithfully. Prefer Ant Design
 components, layout primitives, tokens, spacing, typography, and interaction
 patterns over custom visual reinvention. Do not describe a result as "Ant
 Design" if it mainly uses bespoke styling layered on top of Ant primitives.
-
-```html#index.html
-<html>
-  <body>
-    <h1>Hello, world!</h1>
-    <script type="module" src="./frontend.tsx"></script>
-  </body>
-</html>
-```
-
-With the following `frontend.tsx`:
-
-```tsx#frontend.tsx
-import React from "react";
-import { createRoot } from "react-dom/client";
-
-// import .css files directly and it works
-import './index.css';
-
-const root = createRoot(document.body);
-
-export default function Frontend() {
-  return <h1>Hello, world!</h1>;
-}
-
-root.render(<Frontend />);
-```
-
-Then, run index.ts
-
-```sh
-bun --hot ./index.ts
-```
 
 For more information, read the Bun API docs in
 `node_modules/bun-types/docs/**.mdx`.
