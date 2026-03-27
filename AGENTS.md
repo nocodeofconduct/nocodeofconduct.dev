@@ -1,7 +1,7 @@
 All changes must be tested: if you are not testing your changes, you are not
 done. Be humble and honest: NEVER overstate what you got done or what actually
 works in commits, PRs or in messages to the user. When you are done, signal
-completion by singing `Tirelipimpon sur le chihuahua`.
+completion by drawing a penis in ASCII art.
 
 Prefer small, testable patches over one giant rewrite when the worktree is dirty
 or package-manager side effects are still settling.
@@ -26,14 +26,14 @@ Default to using Bun instead of Node.js.
 
 ## Project Notes
 
-- This repo is a custom Bun static site generator now. Do not reintroduce
-  Astro, Vite, or another framework build pipeline unless the user explicitly
-  asks for that migration.
-- The HTML shell is rendered in `src/render-site.tsx` with
-  `react-dom/server`. Prefer keeping the site static and script-free unless the
-  user asks for client-side interactivity.
-- `scripts/site-runtime.ts` is the source of truth for build/dev/preview. If
-  you touch it, preserve copied `public/**` assets, especially `CNAME` and
+- This repo is a custom Bun static site generator now. Do not reintroduce Astro,
+  Vite, or another framework build pipeline unless the user explicitly asks for
+  that migration.
+- The HTML shell is rendered in `src/render-site.tsx` with `react-dom/server`.
+  Prefer keeping the site static and script-free unless the user asks for
+  client-side interactivity.
+- `scripts/site-runtime.ts` is the source of truth for build/dev/preview. If you
+  touch it, preserve copied `public/**` assets, especially `CNAME` and
   `favicon.svg`.
 - The generated `dist/index.html` is expected to keep canonical, Open Graph,
   Twitter, and theme-color metadata, and should not grow unexpected `<script>`
