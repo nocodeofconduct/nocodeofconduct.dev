@@ -3,7 +3,11 @@ import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { homeCanonicalUrl, siteConfig } from "../src/config/site";
+import {
+  homeCanonicalUrl,
+  siteConfig,
+  siteThemeColor,
+} from "../src/config/site";
 import { verifyDist } from "./site-artifacts";
 
 const tempDirs: string[] = [];
@@ -15,9 +19,13 @@ async function makeTempRepo() {
 }
 
 async function writeDistFixture(rootDir: string, html: string) {
-  await mkdir(join(rootDir, "dist", "_astro"), { recursive: true });
-  await Bun.write(join(rootDir, "dist", "_astro", "entry.css"), "body{}");
+  await mkdir(join(rootDir, "dist", "_assets"), { recursive: true });
+  await mkdir(join(rootDir, "public"), { recursive: true });
+  await Bun.write(join(rootDir, "dist", "_assets", "antd.css"), "body{}");
+  await Bun.write(join(rootDir, "dist", "_assets", "global.css"), "html{}");
   await Bun.write(join(rootDir, "dist", "favicon.svg"), "<svg></svg>");
+  await Bun.write(join(rootDir, "public", "CNAME"), "nocodeofconduct.dev");
+  await Bun.write(join(rootDir, "dist", "CNAME"), "nocodeofconduct.dev");
   await Bun.write(join(rootDir, "dist", "index.html"), html);
 }
 
@@ -43,16 +51,19 @@ test("verifyDist passes for a build with the expected site metadata", async () =
       "<head>",
       `<title>${siteConfig.name}</title>`,
       `<meta name="description" content="${siteConfig.description}" />`,
+      '<meta property="og:type" content="website" />',
+      `<meta property="og:site_name" content="${siteConfig.name}" />`,
       `<meta property="og:title" content="${siteConfig.name}" />`,
       `<meta property="og:description" content="${siteConfig.description}" />`,
       `<meta property="og:url" content="${homeCanonicalUrl}" />`,
       `<meta name="twitter:title" content="${siteConfig.name}" />`,
       `<meta name="twitter:description" content="${siteConfig.description}" />`,
       '<meta name="twitter:card" content="summary_large_image" />',
-      '<meta name="theme-color" content="#0f1720" />',
+      `<meta name="theme-color" content="${siteThemeColor}" />`,
       `<link rel="canonical" href="${homeCanonicalUrl}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_astro/entry.css" />',
+      '<link rel="stylesheet" href="/_assets/antd.css" />',
+      '<link rel="stylesheet" href="/_assets/global.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -63,7 +74,11 @@ test("verifyDist passes for a build with the expected site metadata", async () =
 
   expect(result.ok).toBe(true);
   expect(result.errors).toEqual([]);
-  expect(result.assetReferences).toEqual(["_astro/entry.css", "favicon.svg"]);
+  expect(result.assetReferences).toEqual([
+    "_assets/antd.css",
+    "_assets/global.css",
+    "favicon.svg",
+  ]);
   expect(result.indexHash).toBeTruthy();
 });
 
@@ -78,14 +93,17 @@ test("verifyDist reports missing canonical metadata", async () => {
       "<head>",
       `<title>${siteConfig.name}</title>`,
       `<meta name="description" content="${siteConfig.description}" />`,
+      '<meta property="og:type" content="website" />',
+      `<meta property="og:site_name" content="${siteConfig.name}" />`,
       `<meta property="og:title" content="${siteConfig.name}" />`,
       `<meta property="og:description" content="${siteConfig.description}" />`,
       `<meta name="twitter:title" content="${siteConfig.name}" />`,
       `<meta name="twitter:description" content="${siteConfig.description}" />`,
       '<meta name="twitter:card" content="summary_large_image" />',
-      '<meta name="theme-color" content="#0f1720" />',
+      `<meta name="theme-color" content="${siteThemeColor}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_astro/entry.css" />',
+      '<link rel="stylesheet" href="/_assets/antd.css" />',
+      '<link rel="stylesheet" href="/_assets/global.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -114,16 +132,18 @@ test("verifyDist reports missing referenced assets", async () => {
       "<head>",
       `<title>${siteConfig.name}</title>`,
       `<meta name="description" content="${siteConfig.description}" />`,
+      '<meta property="og:type" content="website" />',
+      `<meta property="og:site_name" content="${siteConfig.name}" />`,
       `<meta property="og:title" content="${siteConfig.name}" />`,
       `<meta property="og:description" content="${siteConfig.description}" />`,
       `<meta property="og:url" content="${homeCanonicalUrl}" />`,
       `<meta name="twitter:title" content="${siteConfig.name}" />`,
       `<meta name="twitter:description" content="${siteConfig.description}" />`,
       '<meta name="twitter:card" content="summary_large_image" />',
-      '<meta name="theme-color" content="#0f1720" />',
+      `<meta name="theme-color" content="${siteThemeColor}" />`,
       `<link rel="canonical" href="${homeCanonicalUrl}" />`,
       '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
-      '<link rel="stylesheet" href="/_astro/missing.css" />',
+      '<link rel="stylesheet" href="/_assets/missing.css" />',
       "</head>",
       "<body></body>",
       "</html>",
@@ -134,6 +154,46 @@ test("verifyDist reports missing referenced assets", async () => {
 
   expect(result.ok).toBe(false);
   expect(result.errors).toContain(
-    "dist/_astro/missing.css is referenced from dist/index.html but missing.",
+    "dist/_assets/missing.css is referenced from dist/index.html but missing.",
+  );
+});
+
+test("verifyDist reports missing copied public assets", async () => {
+  const rootDir = await makeTempRepo();
+
+  await writeDistFixture(
+    rootDir,
+    [
+      "<!doctype html>",
+      "<html>",
+      "<head>",
+      `<title>${siteConfig.name}</title>`,
+      `<meta name="description" content="${siteConfig.description}" />`,
+      '<meta property="og:type" content="website" />',
+      `<meta property="og:site_name" content="${siteConfig.name}" />`,
+      `<meta property="og:title" content="${siteConfig.name}" />`,
+      `<meta property="og:description" content="${siteConfig.description}" />`,
+      `<meta property="og:url" content="${homeCanonicalUrl}" />`,
+      `<meta name="twitter:title" content="${siteConfig.name}" />`,
+      `<meta name="twitter:description" content="${siteConfig.description}" />`,
+      '<meta name="twitter:card" content="summary_large_image" />',
+      `<meta name="theme-color" content="${siteThemeColor}" />`,
+      `<link rel="canonical" href="${homeCanonicalUrl}" />`,
+      '<link rel="icon" type="image/svg+xml" href="/favicon.svg" />',
+      '<link rel="stylesheet" href="/_assets/antd.css" />',
+      '<link rel="stylesheet" href="/_assets/global.css" />',
+      "</head>",
+      "<body></body>",
+      "</html>",
+    ].join(""),
+  );
+
+  await rm(join(rootDir, "dist", "CNAME"));
+
+  const result = await verifyDist(rootDir);
+
+  expect(result.ok).toBe(false);
+  expect(result.errors).toContain(
+    "dist/CNAME copied from public/CNAME is missing.",
   );
 });

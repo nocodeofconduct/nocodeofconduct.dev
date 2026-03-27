@@ -7,10 +7,8 @@ exports[`NoCodeOfConductLanding captures a stable semantic snapshot of the manif
     "Speak plainly",
     "Repair quickly",
     "Share stewardship",
-    "No symbolic adulthood.",
-    "A culture people can co-own.",
   ],
-  "footer": "Built with Bun, Astro, Primer Brand UI, and deployed via GitHub Pages.",
+  "footer": "Built with Bun, a custom static site generator, Ant Design, and deployed via GitHub Pages.",
   "governanceTerms": [
     "Say what the problem is.",
     "Assume the other person can hear it.",

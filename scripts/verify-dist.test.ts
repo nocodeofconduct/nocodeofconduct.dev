@@ -7,9 +7,14 @@ function makeResult(
   overrides: Partial<DistVerificationResult> = {},
 ): DistVerificationResult {
   return {
-    assetReferences: ["_astro/index.css", "favicon.svg"],
+    assetReferences: ["_assets/antd.css", "_assets/global.css", "favicon.svg"],
     errors: [],
-    files: ["_astro/index.css", "favicon.svg", "index.html"],
+    files: [
+      "_assets/antd.css",
+      "_assets/global.css",
+      "favicon.svg",
+      "index.html",
+    ],
     indexHash: "abc123",
     ok: true,
     ...overrides,
@@ -35,7 +40,7 @@ describe("runVerifyDist", () => {
 
     expect(result.ok).toBe(true);
     expect(logSpy).toHaveBeenCalledWith(
-      "Verified dist output (3 files, 2 asset references, hash abc123).",
+      "Verified dist output (4 files, 3 asset references, hash abc123).",
     );
     expect(errorSpy).not.toHaveBeenCalled();
     expect(exitCodes).toEqual([]);

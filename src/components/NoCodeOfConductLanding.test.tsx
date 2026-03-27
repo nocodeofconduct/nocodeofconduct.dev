@@ -56,9 +56,10 @@ describe("NoCodeOfConductLanding", () => {
     );
 
     expect({
-      articleHeadings: screen
-        .getAllByRole("heading", { level: 3 })
-        .map((element) => element.textContent),
+      articleHeadings: articles.map(
+        ([title]) =>
+          screen.getByRole("heading", { level: 3, name: title }).textContent,
+      ),
       footer: screen.getByText(siteConfig.footerNote).textContent,
       governanceTerms: within(governanceSheet)
         .getAllByText(

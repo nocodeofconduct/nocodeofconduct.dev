@@ -15,7 +15,7 @@ bun = true
 
 [test]
 preload = ["./test/setup.ts"]
-pathIgnorePatterns = ["dist/**", ".astro/**"]
+pathIgnorePatterns = ["dist/**"]
 timeout = 10000
 coverageReporter = ["text", "lcov"]
 coverageDir = "./reports/coverage"
@@ -23,7 +23,10 @@ coverageSkipTestFiles = true
 coveragePathIgnorePatterns = [
   "**/*.d.ts",
   "test/setup.ts",
+  "scripts/build.ts",
+  "scripts/dev.ts",
   "scripts/diagnose-dist.ts",
+  "scripts/preview.ts",
   "scripts/quality.ts",
 ]
 

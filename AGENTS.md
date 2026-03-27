@@ -24,6 +24,24 @@ Default to using Bun instead of Node.js.
 - Use `bunx <package> <command>` instead of `npx <package> <command>`
 - Bun automatically loads .env, so don't use dotenv.
 
+## Project Notes
+
+- This repo is a custom Bun static site generator now. Do not reintroduce
+  Astro, Vite, or another framework build pipeline unless the user explicitly
+  asks for that migration.
+- The HTML shell is rendered in `src/render-site.tsx` with
+  `react-dom/server`. Prefer keeping the site static and script-free unless the
+  user asks for client-side interactivity.
+- `scripts/site-runtime.ts` is the source of truth for build/dev/preview. If
+  you touch it, preserve copied `public/**` assets, especially `CNAME` and
+  `favicon.svg`.
+- The generated `dist/index.html` is expected to keep canonical, Open Graph,
+  Twitter, and theme-color metadata, and should not grow unexpected `<script>`
+  tags without a deliberate product decision.
+- For now, Ant Design CSS is copied into `dist/_assets/antd.css` instead of
+  being rebundled by Bun's CSS pipeline. Do not switch that back casually
+  without re-testing the full build output.
+
 ## APIs
 
 - `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.
@@ -94,6 +112,11 @@ Bun's CSS bundler will bundle.
 If the page is a manifesto, essay, or cultural statement, do not default to
 product-marketing tropes. Prefer editorial hierarchy, clear thesis, and a visual
 language that feels self-possessed rather than sales-driven.
+
+If the repo uses Ant Design, use Ant Design faithfully. Prefer Ant Design
+components, layout primitives, tokens, spacing, typography, and interaction
+patterns over custom visual reinvention. Do not describe a result as "Ant
+Design" if it mainly uses bespoke styling layered on top of Ant primitives.
 
 ```html#index.html
 <html>

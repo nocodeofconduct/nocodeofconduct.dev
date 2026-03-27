@@ -1,12 +1,18 @@
 import { Glob } from "bun";
+import { stat } from "node:fs/promises";
 import { join } from "node:path";
 
-import { homeCanonicalUrl, siteConfig } from "../src/config/site";
+import {
+  homeCanonicalUrl,
+  siteConfig,
+  siteThemeColor,
+} from "../src/config/site";
 
 function getPaths(rootDir: string) {
   return {
     distDir: join(rootDir, "dist"),
     distIndexPath: join(rootDir, "dist", "index.html"),
+    publicDir: join(rootDir, "public"),
   };
 }
 
@@ -16,6 +22,24 @@ export async function listDistFiles(rootDir = process.cwd()) {
   const files: string[] = [];
 
   for await (const file of glob.scan({ cwd: distDir, onlyFiles: true })) {
+    files.push(file);
+  }
+
+  return files.sort();
+}
+
+export async function listPublicFiles(rootDir = process.cwd()) {
+  const { publicDir } = getPaths(rootDir);
+  const publicDirectory = await stat(publicDir).catch(() => null);
+
+  if (!publicDirectory?.isDirectory()) {
+    return [];
+  }
+
+  const glob = new Glob("**/*");
+  const files: string[] = [];
+
+  for await (const file of glob.scan({ cwd: publicDir, onlyFiles: true })) {
     files.push(file);
   }
 
@@ -34,7 +58,7 @@ function extractAssetReferences(html: string) {
 
     if (
       rawReference === "/favicon.svg" ||
-      rawReference.startsWith("/_astro/")
+      rawReference.startsWith("/_assets/")
     ) {
       references.add(rawReference.slice(1));
     }
@@ -57,6 +81,9 @@ export async function verifyDist(
   const { distIndexPath } = getPaths(rootDir);
   let assetReferences: string[] = [];
   const files = await listDistFiles(rootDir).catch(() => [] as string[]);
+  const publicFiles = await listPublicFiles(rootDir).catch(
+    () => [] as string[],
+  );
   const errors: string[] = [];
   let indexHash: string | null = null;
 
@@ -64,8 +91,18 @@ export async function verifyDist(
     errors.push("dist/index.html is missing.");
   }
 
-  if (!files.some((file) => file.startsWith("_astro/"))) {
-    errors.push("dist/_astro is missing hashed build assets.");
+  if (
+    !files.some((file) => file.startsWith("_assets/") && file.endsWith(".css"))
+  ) {
+    errors.push("dist/_assets is missing expected stylesheet assets.");
+  }
+
+  for (const publicFile of publicFiles) {
+    if (!files.includes(publicFile)) {
+      errors.push(
+        `dist/${publicFile} copied from public/${publicFile} is missing.`,
+      );
+    }
   }
 
   const indexFile = Bun.file(distIndexPath);
@@ -78,7 +115,11 @@ export async function verifyDist(
       errors.push("dist/index.html is missing the expected document title.");
     }
 
-    if (!html.includes(`content="${siteConfig.description}"`)) {
+    if (
+      !html.includes(
+        `<meta name="description" content="${siteConfig.description}"`,
+      )
+    ) {
       errors.push(
         "dist/index.html is missing the shared description metadata.",
       );
@@ -88,7 +129,19 @@ export async function verifyDist(
       errors.push("dist/index.html is missing the expected canonical URL.");
     }
 
-    if (!html.includes(`content="${homeCanonicalUrl}"`)) {
+    if (!html.includes('property="og:type" content="website"')) {
+      errors.push("dist/index.html is missing the expected Open Graph type.");
+    }
+
+    if (
+      !html.includes(`property="og:site_name" content="${siteConfig.name}"`)
+    ) {
+      errors.push(
+        "dist/index.html is missing the expected Open Graph site name.",
+      );
+    }
+
+    if (!html.includes(`property="og:url" content="${homeCanonicalUrl}"`)) {
       errors.push("dist/index.html is missing the expected Open Graph URL.");
     }
 
@@ -124,16 +177,20 @@ export async function verifyDist(
       errors.push("dist/index.html is missing the expected Twitter card.");
     }
 
-    if (!html.includes('name="theme-color" content="#0f1720"')) {
+    if (!html.includes(`name="theme-color" content="${siteThemeColor}"`)) {
       errors.push("dist/index.html is missing the expected theme color.");
+    }
+
+    if (/<script\b/i.test(html)) {
+      errors.push("dist/index.html unexpectedly includes script tags.");
     }
 
     if (!assetReferences.includes("favicon.svg")) {
       errors.push("dist/index.html is missing the expected favicon reference.");
     }
 
-    if (!assetReferences.some((file) => file.startsWith("_astro/"))) {
-      errors.push("dist/index.html is missing referenced _astro assets.");
+    if (!assetReferences.some((file) => file.startsWith("_assets/"))) {
+      errors.push("dist/index.html is missing referenced _assets stylesheets.");
     }
 
     for (const assetReference of assetReferences) {

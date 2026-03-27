@@ -5,18 +5,16 @@
   "type": "module",
   "packageManager": "bun@1.3.10",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check",
+    "dev": "bun ./scripts/dev.ts",
+    "build": "bun ./scripts/build.ts",
+    "preview": "bun ./scripts/preview.ts",
+    "check": "tsc --noEmit",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
-    "fmt": "bun run fmt:biome && bun run fmt:astro",
-    "fmt:check": "bun run fmt:check:biome && bun run fmt:check:astro",
+    "fmt": "bun run fmt:biome",
+    "fmt:check": "bun run fmt:check:biome",
     "fmt:biome": "biome format --write .",
     "fmt:check:biome": "biome format .",
-    "fmt:astro": "prettier --write \"src/**/*.astro\"",
-    "fmt:check:astro": "prettier --check \"src/**/*.astro\"",
     "postbuild": "bun ./scripts/verify-dist.ts",
     "verify:dist": "bun ./scripts/verify-dist.ts",
     "diag:dist": "bun ./scripts/diagnose-dist.ts",
@@ -30,23 +28,18 @@
     "quality:ci": "bun ./scripts/quality.ts --ci"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.2",
-    "@primer/octicons-react": "^19.23.1",
-    "@primer/react-brand": "^0.65.1",
-    "astro": "^6.1.1",
+    "@ant-design/icons": "^6.1.0",
+    "antd": "^6.3.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.8",
     "@biomejs/biome": "2.4.9",
     "@happy-dom/global-registrator": "^20.8.9",
     "@testing-library/react": "^16.3.2",
     "@types/bun": "^1.3.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "prettier": "3.8.1",
-    "prettier-plugin-astro": "0.14.1",
     "typescript": "^5.9.3"
   }
 }
