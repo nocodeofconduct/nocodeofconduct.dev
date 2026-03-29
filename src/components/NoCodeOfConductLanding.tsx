@@ -1,591 +1,514 @@
+import React from "react";
 import {
-  ArrowRightOutlined,
-  CheckCircleFilled,
-  CompassOutlined,
-  MessageOutlined,
-  SafetyCertificateOutlined,
-  StopFilled,
-  SyncOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+  BaseStyles,
+  Details,
+  Flash,
+  Header,
+  Heading,
+  Label,
+  LinkButton,
+  Stack,
+  Text,
+  ThemeProvider,
+} from "@primer/react";
 import {
-  Button,
-  Card,
-  Col,
-  ConfigProvider,
-  Divider,
-  Flex,
-  Layout,
-  Row,
-  Space,
-  Tag,
-  Timeline,
-  Typography,
-} from "antd";
-
+  ArrowRightIcon,
+  CheckCircleFillIcon,
+  ChevronDownIcon,
+  HashIcon,
+  MegaphoneIcon,
+  PeopleIcon,
+  ShieldCheckIcon,
+} from "@primer/octicons-react";
 import { siteConfig } from "../config/site";
 
-const { Content, Footer, Header } = Layout;
+// ── Content ──────────────────────────────────────────────────────────────────
 
-const navLinks = [
+const principles = [
   {
-    href: "#articles",
-    label: "Articles",
+    number: 1,
+    text: "We are all adults, fully able to conduct frank, mature, and respectful discussions.",
   },
   {
-    href: "#compact-code",
-    label: "Compact code",
+    number: 2,
+    text: "We welcome every contribution on its merits. We do not care about political views, background, gender, or any other personal characteristic. We neither raise nor consider such matters; our sole focus is the quality of the work.",
   },
   {
-    href: "#boundaries",
-    label: "Boundaries",
+    number: 3,
+    text: "Nothing else matters.",
   },
 ] as const;
 
-const heroSignals = [
+const faqs = [
   {
-    detail:
-      "Name the problem directly and leave room for the other person to answer it.",
-    title: "Speak in full sentences",
+    question: "Does this approach make me feel excluded?",
+    answer:
+      "Not at all. The absence of a formal code of conduct does not imply a lack of respect. It simply means we choose to direct our energy toward creation and constructive exchange rather than constant oversight of personal interactions. We trust in the maturity of every participant.",
   },
   {
-    detail:
-      "Consequences should match the breach instead of escalating into theater.",
-    title: "Respond proportionally",
+    question: "How can I feel safe in a community without a code of conduct?",
+    answer:
+      "In the same way one participates in any adult discussion space on the internet: by contributing thoughtfully, addressing misunderstandings directly and privately, and focusing on the work itself. The internet is vast and diverse; we invite you to engage with confidence in what you bring to the project.",
   },
   {
-    detail:
-      "Repair should be visible, legible, and owned by the people affected.",
-    title: "Make repair explicit",
+    question: "What if someone behaves inappropriately?",
+    answer:
+      "We encourage direct, private communication to resolve issues. If the behavior violates the hosting platform's terms of service (such as GitHub's), report it directly to the platform. We do not serve as mediators or arbitrators; each individual is responsible for their own conduct.",
+  },
+  {
+    question:
+      "Is this philosophy compatible with in-person events or professional environments?",
+    answer:
+      "Certainly. Physical or workplace settings often require tailored guidelines. No Code of Conduct is intended primarily for online communities and open-source projects, where the emphasis remains on the quality of contributions.",
+  },
+  {
+    question: "How does this approach welcome newcomers?",
+    answer:
+      "By setting a clear example. We believe a sufficient number of level-headed adults naturally creates a healthy, stimulating environment. We value open discussion, constructive feedback, and the genuine goodwill that arises from mutual respect.",
+  },
+  {
+    question:
+      "What happens if discussion drifts off-topic or becomes unproductive?",
+    answer:
+      "We discourage off-topic conversation without resorting to censorship. Should a thread stray from the project's purpose, we calmly refocus on the shared objective.",
+  },
+  {
+    question: "Why not address individual emotions?",
+    answer:
+      "We are not a support group for personal feelings; we are a community organized around a specific purpose. By concentrating on contributions and ideas, we create a space where everyone can express themselves freely and advance together.",
   },
 ] as const;
 
-const articles = [
-  {
-    description:
-      "Start from peerhood, not suspicion. Adults deserve context, candor, and room to correct course.",
-    detail:
-      "If a community cannot tell the difference between malice, friction, and honest error, it will eventually hand every disagreement to process instead of judgment.",
-    icon: <SafetyCertificateOutlined aria-hidden="true" />,
-    label: "Article 1",
-    title: "Assume competence",
-  },
-  {
-    description:
-      "Name technical and interpersonal problems directly. Vague politeness is usually deferred conflict wearing makeup.",
-    detail:
-      "Plain speech is not cruelty. It is how teams keep resentment from congealing into folklore, cliques, and whispered authority.",
-    icon: <MessageOutlined aria-hidden="true" />,
-    label: "Article 2",
-    title: "Speak plainly",
-  },
-  {
-    description:
-      "When someone crosses a line, respond quickly, proportionally, and in a way that keeps repair available.",
-    detail:
-      "The goal is not ceremonial purity. The goal is to stop damage, clarify expectations, and make the path back to trust legible.",
-    icon: <SyncOutlined aria-hidden="true" />,
-    label: "Article 3",
-    title: "Repair quickly",
-  },
-  {
-    description:
-      "Everyone helps protect the codebase, the working relationship, and the conditions that keep serious work possible.",
-    detail:
-      "A culture worth joining is not managed from above like a daycare. It is co-owned by contributors who are willing to intervene when the work or the relationship starts to rot.",
-    icon: <TeamOutlined aria-hidden="true" />,
-    label: "Article 4",
-    title: "Share stewardship",
-  },
-] as const;
+// ── Tokens ───────────────────────────────────────────────────────────────────
 
-const workingAgreement = [
-  {
-    description:
-      "Do not hide the issue behind vibes, euphemism, or delayed escalation.",
-    title: "Say what the problem is.",
-  },
-  {
-    description:
-      "Start from the assumption that serious people can hear serious feedback.",
-    title: "Assume the other person can hear it.",
-  },
-  {
-    description:
-      "Repair the damage in a way other contributors can see and rely on.",
-    title: "Repair damage when it happens.",
-  },
-  {
-    description:
-      "Keep the work and the relationship inside the same moral frame.",
-    title: "Protect the work and the relationship together.",
-  },
-] as const;
+const borderDefault = "1px solid var(--borderColor-default, #d1d9e0)";
+const fgDefault = "var(--fgColor-default, #1f2328)";
+const fgMuted = "var(--fgColor-muted, #59636e)";
+const bgMuted = "var(--bgColor-muted, #f6f8fa)";
+const bgDefault = "var(--bgColor-default, #ffffff)";
 
-const refusals = [
-  {
-    description:
-      "Slogans that stand in for actual judgment during technical conflict.",
-    title: "Ideological scripts",
-  },
-  {
-    description:
-      "Rules that only make sense once an authority figure explains what they really mean.",
-    title: "Opaque procedure",
-  },
-  {
-    description:
-      "Managerial care-language used to avoid naming the actual breach or disagreement.",
-    title: "Therapeutic theater",
-  },
-] as const;
-
-const protections = [
-  {
-    description:
-      "Direct feedback without humiliation, baiting, or status games.",
-    title: "Candor with dignity",
-  },
-  {
-    description:
-      "Consequences that scale to the harm instead of turning every problem into a purge.",
-    title: "Proportionate response",
-  },
-  {
-    description:
-      "Visible repair so people are not forced to trust private assurances and whispered settlements.",
-    title: "Legible repair",
-  },
-] as const;
-
-const theme = {
-  components: {
-    Button: {
-      defaultShadow: "none",
-      primaryShadow: "none",
-    },
-    Card: {
-      borderRadiusLG: 28,
-    },
-    Layout: {
-      bodyBg: "transparent",
-      footerBg: "transparent",
-      headerBg: "transparent",
-    },
-  },
-  token: {
-    borderRadius: 18,
-    borderRadiusLG: 28,
-    colorBorder: "rgba(17, 24, 39, 0.14)",
-    colorPrimary: "#1d4ed8",
-    colorText: "#121826",
-    colorTextSecondary: "rgba(18, 24, 38, 0.7)",
-    fontFamily: '"Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif',
-  },
-  zeroRuntime: true,
-};
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function NoCodeOfConductLanding() {
   return (
-    <ConfigProvider theme={theme}>
-      <Layout className="nococ-layout">
-        <Header className="nococ-header">
-          <div className="nococ-frame nococ-header__inner">
-            <Space
-              orientation="vertical"
-              size={0}
-              className="nococ-brand-block"
-            >
-              <Typography.Text strong className="nococ-brand">
+    <ThemeProvider colorMode="light">
+      <BaseStyles>
+        <div style={{ minHeight: "100vh", background: bgDefault }}>
+          {/* ── Sticky Header ───────────────────────────────────────────── */}
+          <Header
+            role="banner"
+            style={{ position: "sticky", top: 0, zIndex: 100 }}
+          >
+            <Header.Item>
+              <Header.Link
+                href="#top"
+                style={{ fontWeight: 700, fontSize: "1rem", gap: "0.5rem" }}
+              >
+                <ShieldCheckIcon size={20} />
                 No Code of Conduct
-              </Typography.Text>
-              <Typography.Text className="nococ-brand-note">
-                for adults building things together
-              </Typography.Text>
-            </Space>
+              </Header.Link>
+            </Header.Item>
 
-            <Flex gap="small" wrap className="nococ-header__nav">
-              {navLinks.map((link) => (
-                <Button key={link.href} type="text" href={link.href}>
-                  {link.label}
-                </Button>
-              ))}
-            </Flex>
-          </div>
-        </Header>
+            <Header.Item full />
 
-        <Content>
-          <section className="nococ-hero" id="top">
-            <div className="nococ-frame nococ-hero__inner">
-              <Row gutter={[48, 36]} align="middle">
-                <Col xs={24} xl={14}>
-                  <Space
-                    orientation="vertical"
-                    size="large"
-                    className="nococ-hero__content"
-                  >
-                    <Flex gap="small" wrap className="nococ-tag-row">
-                      <Tag variant="filled" color="blue">
-                        adult self-governance
-                      </Tag>
-                      <Tag variant="filled">technical merit first</Tag>
-                      <Tag variant="filled">repair over ritual</Tag>
-                    </Flex>
+            <Header.Item>
+              <Header.Link href="#principles">Principles</Header.Link>
+            </Header.Item>
+            <Header.Item>
+              <Header.Link href="#adopt">Adopt</Header.Link>
+            </Header.Item>
+            <Header.Item style={{ marginRight: 0 }}>
+              <Header.Link href="#faq">FAQ</Header.Link>
+            </Header.Item>
+          </Header>
 
-                    <div className="nococ-hero__copy">
-                      <Typography.Text className="nococ-kicker">
-                        A manifesto for technical communities that refuse
-                        paternalism.
-                      </Typography.Text>
-                      <Typography.Title level={1} className="nococ-hero__title">
-                        Keep the code of conduct. Lose the infantilizing
-                        theater.
-                      </Typography.Title>
-                      <Typography.Paragraph className="nococ-hero__lede">
-                        The point is not the absence of norms. The point is a
-                        culture strong enough to state expectations plainly,
-                        enforce them proportionally, and revise them in the open
-                        without pretending contributors are children.
-                      </Typography.Paragraph>
-                    </div>
+          <main>
+            {/* ── Hero ─────────────────────────────────────────────────── */}
+            <section
+              id="top"
+              style={{
+                background: bgMuted,
+                borderBottom: borderDefault,
+                padding: "72px 0 80px",
+              }}
+            >
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <Stack direction="vertical" gap="spacious">
+                  {/* Badges */}
+                  <Stack direction="horizontal" gap="condensed" wrap="wrap">
+                    <Label variant="accent" size="large">
+                      <PeopleIcon size={14} />
+                      &ensp;open source
+                    </Label>
+                    <Label variant="success" size="large">
+                      <CheckCircleFillIcon size={14} />
+                      &ensp;meritocracy
+                    </Label>
+                    <Label size="large">no drama</Label>
+                  </Stack>
 
-                    <Flex gap="middle" wrap className="nococ-hero__actions">
-                      <Button
-                        type="primary"
-                        size="large"
-                        href="#articles"
-                        icon={<ArrowRightOutlined />}
-                      >
-                        Read the four articles
-                      </Button>
-                      <Button size="large" href="#compact-code">
-                        Read the compact code
-                      </Button>
-                    </Flex>
-                  </Space>
-                </Col>
-
-                <Col xs={24} xl={10}>
-                  <div className="nococ-hero__aside">
-                    <Typography.Text className="nococ-panel-label">
-                      Operating premise
-                    </Typography.Text>
-                    <Typography.Title level={3}>
-                      A serious team can name a problem without summoning an
-                      authority ritual.
-                    </Typography.Title>
-                    <Typography.Paragraph className="nococ-panel-copy">
-                      Healthy communities are allowed to be specific. They can
-                      say what happened, who it affected, and what repair now
-                      looks like.
-                    </Typography.Paragraph>
-
-                    <Divider className="nococ-divider" />
-
-                    <Row gutter={[16, 16]}>
-                      {heroSignals.map((signal) => (
-                        <Col key={signal.title} xs={24} sm={8} xl={24}>
-                          <div className="nococ-signal">
-                            <Typography.Text
-                              strong
-                              className="nococ-signal__title"
-                            >
-                              {signal.title}
-                            </Typography.Text>
-                            <Typography.Paragraph className="nococ-signal__copy">
-                              {signal.detail}
-                            </Typography.Paragraph>
-                          </div>
-                        </Col>
-                      ))}
-                    </Row>
+                  {/* Title */}
+                  <div>
+                    <Heading
+                      as="h1"
+                      style={{
+                        fontSize: "clamp(2.8rem, 6vw, 4.75rem)",
+                        fontWeight: 800,
+                        lineHeight: 1.05,
+                        letterSpacing: "-0.025em",
+                        marginBottom: "1rem",
+                        color: fgDefault,
+                      }}
+                    >
+                      No Code of Conduct
+                    </Heading>
+                    <Text
+                      as="p"
+                      size="large"
+                      style={{
+                        color: fgMuted,
+                        maxWidth: "52ch",
+                        lineHeight: 1.6,
+                        margin: 0,
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      Liberate your communities and projects from endless
+                      debates. Focus on what truly matters.
+                    </Text>
                   </div>
-                </Col>
-              </Row>
-            </div>
-          </section>
 
-          <section
-            id="articles"
-            className="nococ-section nococ-section--articles"
-          >
-            <div className="nococ-frame">
-              <Row gutter={[40, 24]} className="nococ-section__intro">
-                <Col xs={24} lg={8}>
-                  <Space orientation="vertical" size="small">
-                    <Tag variant="filled" color="geekblue">
-                      Four articles
-                    </Tag>
-                    <Typography.Title level={2}>
-                      Strong enough to guide a serious team.
-                    </Typography.Title>
-                  </Space>
-                </Col>
-                <Col xs={24} lg={16}>
-                  <Typography.Paragraph className="nococ-section__lede">
-                    A community does not become safer by becoming more vague. It
-                    becomes safer when its standards are legible enough to use
-                    during conflict, disagreement, and repair.
-                  </Typography.Paragraph>
-                </Col>
-              </Row>
-
-              <div className="nococ-articles">
-                {articles.map((article, index) => (
-                  <article key={article.title} className="nococ-article">
-                    <Row gutter={[24, 20]}>
-                      <Col xs={24} md={5}>
-                        <Space
-                          orientation="vertical"
-                          size={0}
-                          className="nococ-article__meta"
-                        >
-                          <Typography.Text className="nococ-article__index">
-                            {`0${index + 1}`}
-                          </Typography.Text>
-                          <Typography.Text className="nococ-article__label">
-                            {article.label}
-                          </Typography.Text>
-                        </Space>
-                      </Col>
-
-                      <Col xs={24} md={19}>
-                        <Space
-                          orientation="vertical"
-                          size="middle"
-                          className="nococ-article__body"
-                        >
-                          <Space size="middle" align="start">
-                            <span className="nococ-article__icon">
-                              {article.icon}
-                            </span>
-                            <div>
-                              <Typography.Title level={3}>
-                                {article.title}
-                              </Typography.Title>
-                              <Typography.Paragraph className="nococ-article__summary">
-                                {article.description}
-                              </Typography.Paragraph>
-                            </div>
-                          </Space>
-
-                          <Typography.Paragraph className="nococ-article__detail">
-                            {article.detail}
-                          </Typography.Paragraph>
-                        </Space>
-                      </Col>
-                    </Row>
-                  </article>
-                ))}
+                  {/* CTA buttons */}
+                  <Stack direction="horizontal" gap="normal" wrap="wrap">
+                    <LinkButton
+                      href="#principles"
+                      variant="primary"
+                      size="large"
+                      trailingVisual={ArrowRightIcon}
+                    >
+                      Read the principles
+                    </LinkButton>
+                    <LinkButton href="#adopt" size="large">
+                      How to adopt
+                    </LinkButton>
+                  </Stack>
+                </Stack>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section
-            id="compact-code"
-            className="nococ-section nococ-section--compact"
-            aria-label="Working agreement for adult self-governance"
-          >
-            <div className="nococ-frame">
-              <div className="nococ-compact">
-                <Row gutter={[32, 32]} align="middle">
-                  <Col xs={24} lg={9}>
-                    <Space orientation="vertical" size="small">
-                      <Tag variant="filled" color="cyan">
-                        Compact code
-                      </Tag>
-                      <Typography.Title level={2}>
-                        Short enough to use in real life.
-                      </Typography.Title>
-                      <Typography.Paragraph className="nococ-section__lede nococ-section__lede--light">
-                        A real code of conduct fits in a minute because it
-                        trusts adults to interpret context instead of hiding
-                        every judgment call inside procedure.
-                      </Typography.Paragraph>
-                    </Space>
-                  </Col>
-
-                  <Col xs={24} lg={15}>
-                    <Timeline
-                      className="nococ-timeline"
-                      items={workingAgreement.map((item, index) => ({
-                        content: (
-                          <div className="nococ-timeline__content">
-                            <Typography.Text className="nococ-timeline__index">
-                              {`0${index + 1}`}
-                            </Typography.Text>
-                            <Typography.Title level={4}>
-                              {item.title}
-                            </Typography.Title>
-                            <Typography.Paragraph className="nococ-section__lede nococ-section__lede--light">
-                              {item.description}
-                            </Typography.Paragraph>
-                          </div>
-                        ),
-                      }))}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </section>
-
-          <section id="boundaries" className="nococ-section">
-            <div className="nococ-frame">
-              <Row gutter={[24, 24]}>
-                <Col xs={24} lg={12}>
-                  <Card
-                    variant="borderless"
-                    className="nococ-panel nococ-panel--refusal"
-                  >
-                    <Space orientation="vertical" size="small">
-                      <Tag variant="filled" color="volcano">
-                        Refuses
-                      </Tag>
-                      <Typography.Title level={3}>
-                        No symbolic adulthood.
-                      </Typography.Title>
-                      <Typography.Paragraph className="nococ-panel-copy">
-                        If a standard cannot survive plain language, it is
-                        probably trying to hide power rather than guide
-                        behavior.
-                      </Typography.Paragraph>
-                    </Space>
-
-                    <ul className="nococ-list">
-                      {refusals.map((item) => (
-                        <li key={item.title} className="nococ-list__item">
-                          <Space size="middle" align="start">
-                            <StopFilled className="nococ-list__icon nococ-list__icon--stop" />
-                            <div>
-                              <Typography.Text strong>
-                                {item.title}
-                              </Typography.Text>
-                              <Typography.Paragraph className="nococ-list__copy">
-                                {item.description}
-                              </Typography.Paragraph>
-                            </div>
-                          </Space>
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </Col>
-
-                <Col xs={24} lg={12}>
-                  <Card
-                    variant="borderless"
-                    className="nococ-panel nococ-panel--protection"
-                  >
-                    <Space orientation="vertical" size="small">
-                      <Tag variant="filled" color="green">
-                        Protects
-                      </Tag>
-                      <Typography.Title level={3}>
-                        What a grown-up standard preserves.
-                      </Typography.Title>
-                      <Typography.Paragraph className="nococ-panel-copy">
-                        The absence of ritual is not a shrug. It is a demand for
-                        norms that contributors can actually share, interpret,
-                        and uphold together.
-                      </Typography.Paragraph>
-                    </Space>
-
-                    <ul className="nococ-list">
-                      {protections.map((item) => (
-                        <li key={item.title} className="nococ-list__item">
-                          <Space size="middle" align="start">
-                            <CheckCircleFilled className="nococ-list__icon nococ-list__icon--check" />
-                            <div>
-                              <Typography.Text strong>
-                                {item.title}
-                              </Typography.Text>
-                              <Typography.Paragraph className="nococ-list__copy">
-                                {item.description}
-                              </Typography.Paragraph>
-                            </div>
-                          </Space>
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </Col>
-              </Row>
-            </div>
-          </section>
-
-          <section className="nococ-section nococ-section--closing">
-            <div className="nococ-frame">
-              <div className="nococ-closing">
-                <Row gutter={[32, 24]} align="middle">
-                  <Col xs={24} lg={15}>
-                    <Space orientation="vertical" size="small">
-                      <Tag variant="filled">No ritual, no shrug</Tag>
-                      <Typography.Title level={2}>
-                        Write the norms like you expect adults to enforce them.
-                      </Typography.Title>
-                      <Typography.Paragraph className="nococ-section__lede">
-                        Serious communities do not need less responsibility.
-                        They need fewer euphemisms, fewer authority games, and
-                        standards that still make sense once the meeting is
-                        over.
-                      </Typography.Paragraph>
-                    </Space>
-                  </Col>
-
-                  <Col xs={24} lg={9}>
-                    <div className="nococ-closing__actions">
-                      <Space orientation="vertical" size="middle">
-                        <Flex gap="small" wrap>
-                          <Tag variant="filled" icon={<CompassOutlined />}>
-                            orient the team
-                          </Tag>
-                          <Tag variant="filled" icon={<SyncOutlined />}>
-                            repair in the open
-                          </Tag>
-                          <Tag variant="filled" icon={<ArrowRightOutlined />}>
-                            keep moving
-                          </Tag>
-                        </Flex>
-                        <Button type="primary" size="large" href="#top">
-                          Back to the manifesto
-                        </Button>
-                      </Space>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </section>
-        </Content>
-
-        <Footer className="nococ-footer">
-          <div className="nococ-frame nococ-footer__inner">
-            <Divider className="nococ-divider" />
-            <Row gutter={[16, 12]}>
-              <Col xs={24} md={12}>
-                <Space orientation="vertical" size={0}>
-                  <Typography.Text strong>No Code of Conduct</Typography.Text>
-                  <Typography.Text type="secondary">
-                    Contributions will be judged by their technical merit.
-                  </Typography.Text>
-                </Space>
-              </Col>
-              <Col xs={24} md={12}>
-                <Space
-                  orientation="vertical"
-                  size={0}
-                  className="nococ-footer__meta"
+            {/* ── Intro ────────────────────────────────────────────────── */}
+            <section
+              style={{
+                borderBottom: borderDefault,
+                padding: "56px 0",
+              }}
+            >
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <Heading
+                  as="h2"
+                  variant="large"
+                  style={{ marginBottom: "1.25rem", color: fgDefault }}
                 >
-                  <Typography.Text type="secondary">
-                    {siteConfig.footerNote}
-                  </Typography.Text>
-                </Space>
-              </Col>
-            </Row>
-          </div>
-        </Footer>
-      </Layout>
-    </ConfigProvider>
+                  What if we simply agreed—once and for all—to move forward?
+                </Heading>
+                <Text
+                  as="p"
+                  size="large"
+                  style={{
+                    color: fgMuted,
+                    maxWidth: "72ch",
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}
+                >
+                  No Code of Conduct is a fresh, practical approach designed to
+                  help open-source projects and online communities stay centered
+                  on meaningful contributions, constructive dialogue, and shared
+                  progress. It rests on a straightforward premise: we are all
+                  capable adults who can engage with one another respectfully
+                  and productively without formal rules dictating every
+                  interaction.
+                </Text>
+              </div>
+            </section>
+
+            {/* ── Principles ───────────────────────────────────────────── */}
+            <section
+              id="principles"
+              style={{ borderBottom: borderDefault, padding: "56px 0" }}
+            >
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <div className="Subhead" style={{ maxWidth: "72ch" }}>
+                  <Heading as="h2" className="Subhead-heading">
+                    We commit to three clear principles
+                  </Heading>
+                  <Text as="p" className="Subhead-description">
+                    Simple, powerful, and effective.
+                  </Text>
+                </div>
+
+                <div className="Box" style={{ maxWidth: "72ch" }}>
+                  {principles.map((p) => (
+                    <div
+                      key={p.number}
+                      className="Box-row"
+                      style={{
+                        display: "flex",
+                        gap: "1rem",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Label
+                        variant="accent"
+                        size="large"
+                        style={{
+                          flexShrink: 0,
+                          minWidth: "1.75rem",
+                          textAlign: "center",
+                          fontWeight: 700,
+                          marginTop: "2px",
+                        }}
+                      >
+                        {p.number}
+                      </Label>
+                      <Text
+                        as="p"
+                        size="large"
+                        style={{
+                          margin: 0,
+                          lineHeight: 1.65,
+                          color: fgDefault,
+                        }}
+                      >
+                        {p.text}
+                      </Text>
+                    </div>
+                  ))}
+                  <div className="Box-footer">
+                    <Text
+                      style={{ color: fgMuted, fontSize: "0.875rem" }}
+                    >
+                      That is the entire philosophy—simple, powerful, and
+                      effective.
+                    </Text>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* ── Adopt + Promote ──────────────────────────────────────── */}
+            <section
+              id="adopt"
+              style={{ borderBottom: borderDefault, padding: "56px 0" }}
+            >
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <Stack
+                  direction={{ narrow: "vertical", regular: "horizontal" }}
+                  gap="spacious"
+                >
+                  {/* How to adopt */}
+                  <Stack
+                    direction="vertical"
+                    gap="normal"
+                    style={{ flex: 1 }}
+                  >
+                    <div className="Subhead">
+                      <Heading as="h2" className="Subhead-heading">
+                        How to Adopt No Code of Conduct
+                      </Heading>
+                    </div>
+                    <Text
+                      as="p"
+                      size="large"
+                      style={{
+                        color: fgMuted,
+                        maxWidth: "48ch",
+                        lineHeight: 1.7,
+                        margin: 0,
+                      }}
+                    >
+                      It could not be simpler. Copy the file{" "}
+                      <code>CODE_OF_CONDUCT.md</code> into the root directory
+                      of your repository. Feel free to adapt the wording to
+                      suit your needs while preserving these three core
+                      principles.
+                    </Text>
+                    <div>
+                      <LinkButton
+                        href="https://github.com/domgetter/NCoC/blob/master/CODE_OF_CONDUCT.md"
+                        variant="primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Get CODE_OF_CONDUCT.md
+                      </LinkButton>
+                    </div>
+                  </Stack>
+
+                  {/* How to promote */}
+                  <Stack
+                    direction="vertical"
+                    gap="normal"
+                    style={{ flex: 1 }}
+                  >
+                    <div className="Subhead">
+                      <Heading as="h2" className="Subhead-heading">
+                        How to Promote This Approach
+                      </Heading>
+                    </div>
+                    <Text
+                      as="p"
+                      size="large"
+                      style={{
+                        color: fgMuted,
+                        maxWidth: "48ch",
+                        lineHeight: 1.7,
+                        margin: 0,
+                      }}
+                    >
+                      Discuss it openly, share it freely, and promote it
+                      wherever you choose. Use the hashtag{" "}
+                      <strong style={{ color: fgDefault }}>#NCoC</strong> on
+                      social platforms to help the movement grow.
+                    </Text>
+                    <Stack
+                      direction="horizontal"
+                      gap="condensed"
+                      align="center"
+                    >
+                      <HashIcon
+                        size={20}
+                        style={{
+                          color: "var(--fgColor-accent, #0969da)",
+                          verticalAlign: "middle",
+                        }}
+                      />
+                      <Label variant="accent" size="large">
+                        NCoC
+                      </Label>
+                      <MegaphoneIcon
+                        size={20}
+                        style={{ color: fgMuted, verticalAlign: "middle" }}
+                      />
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </div>
+            </section>
+
+            {/* ── FAQ ──────────────────────────────────────────────────── */}
+            <section
+              id="faq"
+              style={{ borderBottom: borderDefault, padding: "56px 0" }}
+            >
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <div className="Subhead">
+                  <Heading as="h2" className="Subhead-heading">
+                    Frequently Asked Questions
+                  </Heading>
+                  <Text as="p" className="Subhead-description">
+                    Honest answers to common concerns.
+                  </Text>
+                </div>
+
+                <div className="Box" style={{ maxWidth: "72ch" }}>
+                  {faqs.map((faq, index) => (
+                    <Details
+                      key={index}
+                      className="Box-row faq-item"
+                      style={{ padding: 0 }}
+                    >
+                      <Details.Summary
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.75rem",
+                          padding: "1rem",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "1rem",
+                          color: fgDefault,
+                          listStyle: "none",
+                          userSelect: "none",
+                        }}
+                      >
+                        {faq.question}
+                        <ChevronDownIcon
+                          size={16}
+                          className="faq-chevron"
+                          style={{ marginLeft: "auto", flexShrink: 0 }}
+                        />
+                      </Details.Summary>
+                      <div
+                        style={{
+                          padding: "0 1rem 1.25rem",
+                          color: fgMuted,
+                          fontSize: "1rem",
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {faq.answer}
+                      </div>
+                    </Details>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* ── Pledge ───────────────────────────────────────────────── */}
+            <section id="pledge" style={{ padding: "56px 0 80px" }}>
+              <div className="container-xl px-3 px-md-4 px-lg-5">
+                <Flash
+                  variant="success"
+                  style={{ maxWidth: "72ch", padding: "24px 28px" }}
+                >
+                  <Stack direction="vertical" gap="condensed">
+                    <Text
+                      as="p"
+                      weight="semibold"
+                      size="large"
+                      style={{ margin: 0 }}
+                    >
+                      This project adheres to No Code of Conduct.
+                    </Text>
+                    <Text
+                      as="p"
+                      style={{ margin: 0, color: fgMuted }}
+                    >
+                      We are all adults. We accept all contributions. Nothing
+                      else matters.
+                    </Text>
+                  </Stack>
+                </Flash>
+              </div>
+            </section>
+          </main>
+
+          {/* ── Footer ───────────────────────────────────────────────────── */}
+          <footer
+            style={{ borderTop: borderDefault, padding: "24px 0" }}
+          >
+            <div className="container-xl px-3 px-md-4 px-lg-5">
+              <Stack
+                direction="horizontal"
+                gap="normal"
+                align="center"
+                justify="space-between"
+                wrap="wrap"
+              >
+                <Text weight="semibold" style={{ color: fgDefault }}>
+                  No Code of Conduct
+                </Text>
+                <Text
+                  style={{ color: fgMuted, fontSize: "0.75rem" }}
+                >
+                  {siteConfig.footerNote}
+                </Text>
+              </Stack>
+            </div>
+          </footer>
+        </div>
+      </BaseStyles>
+    </ThemeProvider>
   );
 }

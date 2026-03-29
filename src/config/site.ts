@@ -7,7 +7,7 @@ export const siteConfig = {
   name: "No Code of Conduct",
   description: "Contributions will be judged by their technical merit.",
   footerNote:
-    "Built with Bun, Astro, React, Ant Design, and deployed via GitHub Pages.",
+    "Built with Bun, Astro, React, Primer CSS, and deployed via GitHub Pages.",
 } as const;
 
 export const homeCanonicalUrl = new URL("/", siteConfig.url).toString();
