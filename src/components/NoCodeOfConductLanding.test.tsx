@@ -61,13 +61,13 @@ describe("NoCodeOfConductLanding", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "How to Adopt No Code of Conduct",
+        name: "How to Adopt",
       }),
     ).toBeTruthy();
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "How to Promote This Approach",
+        name: "How to Promote",
       }),
     ).toBeTruthy();
     // #NCoC appears as text in the paragraph and as a Label — use getAllByText
