@@ -15,13 +15,14 @@ import {
   ArrowRightIcon,
   CheckCircleFillIcon,
   ChevronDownIcon,
+  HashIcon,
   MegaphoneIcon,
   PeopleIcon,
   ShieldCheckIcon,
 } from "@primer/octicons-react";
 import { siteConfig } from "../config/site";
 
-// ── Data ──────────────────────────────────────────────────────────────────────
+// ── Content ──────────────────────────────────────────────────────────────────
 
 const principles = [
   {
