@@ -79,13 +79,13 @@ const faqs = [
   },
 ] as const;
 
-// ── Tokens ───────────────────────────────────────────────────────────────────
+// ── Tokens ────────────────────────────────────────────────────────────────────
 
-const borderDefault = "1px solid var(--borderColor-default, #d1d9e0)";
-const fgDefault = "var(--fgColor-default, #1f2328)";
+const fg = "var(--fgColor-default, #1f2328)";
 const fgMuted = "var(--fgColor-muted, #59636e)";
-const bgMuted = "var(--bgColor-muted, #f6f8fa)";
 const bgDefault = "var(--bgColor-default, #ffffff)";
+const bgMuted = "var(--bgColor-muted, #f6f8fa)";
+const border = "1px solid var(--borderColor-default, #d1d9e0)";
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -93,134 +93,89 @@ export default function NoCodeOfConductLanding() {
   return (
     <ThemeProvider colorMode="light">
       <BaseStyles>
-        <div style={{ minHeight: "100vh", background: bgDefault }}>
-          {/* ── Sticky Header ───────────────────────────────────────────── */}
-          <Header
-            role="banner"
-            style={{ position: "sticky", top: 0, zIndex: 100 }}
-          >
+        <div style={{ background: bgDefault }}>
+
+          {/* ── Header ──────────────────────────────────────────────────── */}
+          <Header role="banner" style={{ position: "sticky", top: 0, zIndex: 100 }}>
             <Header.Item>
-              <Header.Link
-                href="#top"
-                style={{ fontWeight: 700, fontSize: "1rem", gap: "0.5rem" }}
-              >
-                <ShieldCheckIcon size={20} />
+              <Header.Link href="#top" style={{ fontWeight: 700, fontSize: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <ShieldCheckIcon size={18} />
                 No Code of Conduct
               </Header.Link>
             </Header.Item>
-
             <Header.Item full />
-
-            <Header.Item>
-              <Header.Link href="#principles">Principles</Header.Link>
-            </Header.Item>
-            <Header.Item>
-              <Header.Link href="#adopt">Adopt</Header.Link>
-            </Header.Item>
-            <Header.Item style={{ marginRight: 0 }}>
-              <Header.Link href="#faq">FAQ</Header.Link>
-            </Header.Item>
+            <Header.Item><Header.Link href="#principles">Principles</Header.Link></Header.Item>
+            <Header.Item><Header.Link href="#adopt">Adopt</Header.Link></Header.Item>
+            <Header.Item style={{ marginRight: 0 }}><Header.Link href="#faq">FAQ</Header.Link></Header.Item>
           </Header>
 
           <main>
-            {/* ── Hero ─────────────────────────────────────────────────── */}
-            <section
-              id="top"
-              style={{
-                background: bgMuted,
-                borderBottom: borderDefault,
-                padding: "72px 0 80px",
-              }}
-            >
+
+            {/* ── Hero ────────────────────────────────────────────────── */}
+            <section id="top" style={{ padding: "88px 0 80px", borderBottom: border }}>
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <Stack direction="vertical" gap="spacious">
-                  {/* Badges */}
-                  <Stack direction="horizontal" gap="condensed" wrap="wrap">
-                    <Label variant="accent" size="large">
-                      <PeopleIcon size={14} />
-                      &ensp;open source
-                    </Label>
-                    <Label variant="success" size="large">
-                      <CheckCircleFillIcon size={14} />
-                      &ensp;meritocracy
-                    </Label>
-                    <Label size="large">no drama</Label>
-                  </Stack>
 
-                  {/* Title */}
-                  <div>
-                    <Heading
-                      as="h1"
-                      style={{
-                        fontSize: "clamp(2.8rem, 6vw, 4.75rem)",
-                        fontWeight: 800,
-                        lineHeight: 1.05,
-                        letterSpacing: "-0.025em",
-                        marginBottom: "1rem",
-                        color: fgDefault,
-                      }}
-                    >
-                      No Code of Conduct
-                    </Heading>
-                    <Text
-                      as="p"
-                      size="large"
-                      style={{
-                        color: fgMuted,
-                        maxWidth: "52ch",
-                        lineHeight: 1.6,
-                        margin: 0,
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      Liberate your communities and projects from endless
-                      debates. Focus on what truly matters.
-                    </Text>
-                  </div>
-
-                  {/* CTA buttons */}
-                  <Stack direction="horizontal" gap="normal" wrap="wrap">
-                    <LinkButton
-                      href="#principles"
-                      variant="primary"
-                      size="large"
-                      trailingVisual={ArrowRightIcon}
-                    >
-                      Read the principles
-                    </LinkButton>
-                    <LinkButton href="#adopt" size="large">
-                      How to adopt
-                    </LinkButton>
-                  </Stack>
+                {/* Eyebrow badges */}
+                <Stack direction="horizontal" gap="condensed" wrap="wrap" style={{ marginBottom: "1.75rem" }}>
+                  <Label variant="accent" size="large">
+                    <PeopleIcon size={13} verticalAlign="middle" />
+                    &ensp;For adults
+                  </Label>
+                  <Label variant="success" size="large">
+                    <CheckCircleFillIcon size={13} verticalAlign="middle" />
+                    &ensp;Merit-based
+                  </Label>
+                  <Label size="large">No drama</Label>
                 </Stack>
+
+                {/* Main headline */}
+                <h1 style={{
+                  fontSize: "clamp(3.25rem, 7vw, 5.25rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.03em",
+                  color: fg,
+                  margin: "0 0 1.25rem",
+                  maxWidth: "14ch",
+                }}>
+                  No Code of Conduct
+                </h1>
+
+                <p style={{
+                  fontSize: "1.3rem",
+                  color: fgMuted,
+                  maxWidth: "50ch",
+                  lineHeight: 1.55,
+                  margin: "0 0 2.5rem",
+                }}>
+                  Liberate your communities and projects from endless debates.
+                  Focus on what truly matters.
+                </p>
+
+                <Stack direction="horizontal" gap="normal" wrap="wrap">
+                  <LinkButton
+                    href="#principles"
+                    variant="primary"
+                    size="large"
+                    trailingVisual={ArrowRightIcon}
+                  >
+                    Read the principles
+                  </LinkButton>
+                  <LinkButton href="#adopt" size="large">
+                    How to adopt
+                  </LinkButton>
+                </Stack>
+
               </div>
             </section>
 
-            {/* ── Intro ────────────────────────────────────────────────── */}
-            <section
-              style={{
-                borderBottom: borderDefault,
-                padding: "56px 0",
-              }}
-            >
+            {/* ── Intro ───────────────────────────────────────────────── */}
+            <section style={{ background: bgMuted, padding: "64px 0", borderBottom: border }}>
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <Heading
-                  as="h2"
-                  variant="large"
-                  style={{ marginBottom: "1.25rem", color: fgDefault }}
-                >
+                <h2 className="ncoc-title" style={{ maxWidth: "24ch", marginBottom: "2rem" }}>
                   What if we simply agreed—once and for all—to move forward?
-                </Heading>
-                <Text
-                  as="p"
-                  size="large"
-                  style={{
-                    color: fgMuted,
-                    maxWidth: "72ch",
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
+                </h2>
+                <p className="ncoc-intro-text">
                   No Code of Conduct is a fresh, practical approach designed to
                   help open-source projects and online communities stay centered
                   on meaningful contributions, constructive dialogue, and shared
@@ -228,285 +183,142 @@ export default function NoCodeOfConductLanding() {
                   capable adults who can engage with one another respectfully
                   and productively without formal rules dictating every
                   interaction.
-                </Text>
+                </p>
               </div>
             </section>
 
-            {/* ── Principles ───────────────────────────────────────────── */}
-            <section
-              id="principles"
-              style={{ borderBottom: borderDefault, padding: "56px 0" }}
-            >
+            {/* ── Principles ──────────────────────────────────────────── */}
+            <section id="principles" style={{ padding: "72px 0", borderBottom: border }}>
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <div className="Subhead" style={{ maxWidth: "72ch" }}>
-                  <Heading as="h2" className="Subhead-heading">
-                    We commit to three clear principles
-                  </Heading>
-                  <Text as="p" className="Subhead-description">
-                    Simple, powerful, and effective.
-                  </Text>
-                </div>
 
-                <div className="Box" style={{ maxWidth: "72ch" }}>
+                <h2 className="ncoc-title">We commit to three clear principles</h2>
+                <p style={{ color: fgMuted, fontSize: "1rem", margin: "0 0 2.5rem" }}>
+                  Simple, powerful, and effective.
+                </p>
+
+                <div className="ncoc-grid" style={{ maxWidth: "900px" }}>
                   {principles.map((p) => (
-                    <div
-                      key={p.number}
-                      className="Box-row"
-                      style={{
-                        display: "flex",
-                        gap: "1rem",
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <Label
-                        variant="accent"
-                        size="large"
-                        style={{
-                          flexShrink: 0,
-                          minWidth: "1.75rem",
-                          textAlign: "center",
-                          fontWeight: 700,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {p.number}
-                      </Label>
-                      <Text
-                        as="p"
-                        size="large"
-                        style={{
-                          margin: 0,
-                          lineHeight: 1.65,
-                          color: fgDefault,
-                        }}
-                      >
+                    <div key={p.number} className="ncoc-card">
+                      <div className="ncoc-num">{p.number}</div>
+                      <p style={{ margin: 0, color: fg, lineHeight: 1.65, fontSize: "0.9375rem" }}>
                         {p.text}
-                      </Text>
+                      </p>
                     </div>
                   ))}
-                  <div className="Box-footer">
-                    <Text
-                      style={{ color: fgMuted, fontSize: "0.875rem" }}
-                    >
-                      That is the entire philosophy—simple, powerful, and
-                      effective.
-                    </Text>
-                  </div>
                 </div>
+
+                <p style={{ color: fgMuted, fontSize: "0.875rem", marginTop: "2rem", marginBottom: 0 }}>
+                  That is the entire philosophy—simple, powerful, and effective.
+                </p>
+
               </div>
             </section>
 
-            {/* ── Adopt + Promote ──────────────────────────────────────── */}
-            <section
-              id="adopt"
-              style={{ borderBottom: borderDefault, padding: "56px 0" }}
-            >
+            {/* ── Adopt + Promote ─────────────────────────────────────── */}
+            <section id="adopt" style={{ background: bgMuted, padding: "72px 0", borderBottom: border }}>
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <Stack
-                  direction={{ narrow: "vertical", regular: "horizontal" }}
-                  gap="spacious"
-                >
-                  {/* How to adopt */}
-                  <Stack
-                    direction="vertical"
-                    gap="normal"
-                    style={{ flex: 1 }}
-                  >
-                    <div className="Subhead">
-                      <Heading as="h2" className="Subhead-heading">
-                        How to Adopt No Code of Conduct
-                      </Heading>
-                    </div>
-                    <Text
-                      as="p"
-                      size="large"
-                      style={{
-                        color: fgMuted,
-                        maxWidth: "48ch",
-                        lineHeight: 1.7,
-                        margin: 0,
-                      }}
-                    >
-                      It could not be simpler. Copy the file{" "}
-                      <code>CODE_OF_CONDUCT.md</code> into the root directory
-                      of your repository. Feel free to adapt the wording to
-                      suit your needs while preserving these three core
-                      principles.
-                    </Text>
-                    <div>
-                      <LinkButton
-                        href="https://github.com/domgetter/NCoC/blob/master/CODE_OF_CONDUCT.md"
-                        variant="primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Get CODE_OF_CONDUCT.md
-                      </LinkButton>
-                    </div>
-                  </Stack>
+                <div className="ncoc-twoup">
 
-                  {/* How to promote */}
-                  <Stack
-                    direction="vertical"
-                    gap="normal"
-                    style={{ flex: 1 }}
-                  >
-                    <div className="Subhead">
-                      <Heading as="h2" className="Subhead-heading">
-                        How to Promote This Approach
-                      </Heading>
-                    </div>
-                    <Text
-                      as="p"
-                      size="large"
-                      style={{
-                        color: fgMuted,
-                        maxWidth: "48ch",
-                        lineHeight: 1.7,
-                        margin: 0,
-                      }}
+                  {/* Adopt */}
+                  <div>
+                    <h2 className="ncoc-title">How to Adopt</h2>
+                    <p style={{ color: fgMuted, lineHeight: 1.7, fontSize: "0.9375rem", margin: "0 0 1.75rem" }}>
+                      It could not be simpler. Copy the file{" "}
+                      <code style={{ background: "var(--bgColor-neutral-muted, rgba(129,139,152,0.12))", padding: "0.1em 0.4em", borderRadius: "4px", fontSize: "0.9em" }}>CODE_OF_CONDUCT.md</code>{" "}
+                      into the root directory of your repository. Feel free to
+                      adapt the wording to suit your needs while preserving
+                      these three core principles.
+                    </p>
+                    <LinkButton
+                      href="https://github.com/domgetter/NCoC/blob/master/CODE_OF_CONDUCT.md"
+                      variant="primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
+                      Get CODE_OF_CONDUCT.md
+                    </LinkButton>
+                  </div>
+
+                  {/* Promote */}
+                  <div>
+                    <h2 className="ncoc-title">How to Promote</h2>
+                    <p style={{ color: fgMuted, lineHeight: 1.7, fontSize: "0.9375rem", margin: "0 0 1.75rem" }}>
                       Discuss it openly, share it freely, and promote it
                       wherever you choose. Use the hashtag{" "}
-                      <strong style={{ color: fgDefault }}>#NCoC</strong> on
-                      social platforms to help the movement grow.
-                    </Text>
-                    <Stack
-                      direction="horizontal"
-                      gap="condensed"
-                      align="center"
-                    >
-                      <HashIcon
-                        size={20}
-                        style={{
-                          color: "var(--fgColor-accent, #0969da)",
-                          verticalAlign: "middle",
-                        }}
-                      />
+                      <strong style={{ color: fg }}>#NCoC</strong> on social
+                      platforms to help the movement grow.
+                    </p>
+                    <Stack direction="horizontal" gap="condensed" align="center">
                       <Label variant="accent" size="large">
-                        NCoC
+                        <MegaphoneIcon size={13} verticalAlign="middle" />
+                        &ensp;#NCoC
                       </Label>
-                      <MegaphoneIcon
-                        size={20}
-                        style={{ color: fgMuted, verticalAlign: "middle" }}
-                      />
                     </Stack>
-                  </Stack>
-                </Stack>
+                  </div>
+
+                </div>
               </div>
             </section>
 
-            {/* ── FAQ ──────────────────────────────────────────────────── */}
-            <section
-              id="faq"
-              style={{ borderBottom: borderDefault, padding: "56px 0" }}
-            >
+            {/* ── FAQ ─────────────────────────────────────────────────── */}
+            <section id="faq" style={{ padding: "72px 0", borderBottom: border }}>
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <div className="Subhead">
-                  <Heading as="h2" className="Subhead-heading">
-                    Frequently Asked Questions
-                  </Heading>
-                  <Text as="p" className="Subhead-description">
-                    Honest answers to common concerns.
-                  </Text>
-                </div>
 
-                <div className="Box" style={{ maxWidth: "72ch" }}>
-                  {faqs.map((faq, index) => (
-                    <Details
-                      key={index}
-                      className="Box-row faq-item"
-                      style={{ padding: 0 }}
-                    >
-                      <Details.Summary
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.75rem",
-                          padding: "1rem",
-                          cursor: "pointer",
-                          fontWeight: 600,
-                          fontSize: "1rem",
-                          color: fgDefault,
-                          listStyle: "none",
-                          userSelect: "none",
-                        }}
-                      >
+                <h2 className="ncoc-title">Frequently Asked Questions</h2>
+                <p style={{ color: fgMuted, fontSize: "1rem", margin: "0 0 2.5rem" }}>
+                  Honest answers to common concerns.
+                </p>
+
+                <div className="ncoc-faq-list">
+                  {faqs.map((faq, i) => (
+                    <details key={i} className="ncoc-faq-item">
+                      <summary>
                         {faq.question}
-                        <ChevronDownIcon
-                          size={16}
-                          className="faq-chevron"
-                          style={{ marginLeft: "auto", flexShrink: 0 }}
-                        />
-                      </Details.Summary>
-                      <div
-                        style={{
-                          padding: "0 1rem 1.25rem",
-                          color: fgMuted,
-                          fontSize: "1rem",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        {faq.answer}
-                      </div>
-                    </Details>
+                        <ChevronDownIcon size={16} className="faq-chevron" />
+                      </summary>
+                      <p className="ncoc-faq-answer">{faq.answer}</p>
+                    </details>
                   ))}
                 </div>
+
               </div>
             </section>
 
-            {/* ── Pledge ───────────────────────────────────────────────── */}
-            <section id="pledge" style={{ padding: "56px 0 80px" }}>
+            {/* ── Pledge ──────────────────────────────────────────────── */}
+            <section id="pledge" className="ncoc-pledge">
               <div className="container-xl px-3 px-md-4 px-lg-5">
-                <Flash
-                  variant="success"
-                  style={{ maxWidth: "72ch", padding: "24px 28px" }}
-                >
-                  <Stack direction="vertical" gap="condensed">
-                    <Text
-                      as="p"
-                      weight="semibold"
-                      size="large"
-                      style={{ margin: 0 }}
-                    >
-                      This project adheres to No Code of Conduct.
-                    </Text>
-                    <Text
-                      as="p"
-                      style={{ margin: 0, color: fgMuted }}
-                    >
-                      We are all adults. We accept all contributions. Nothing
-                      else matters.
-                    </Text>
-                  </Stack>
-                </Flash>
+                <div className="ncoc-pledge-inner">
+                  <p className="ncoc-pledge-title">
+                    This project adheres to No Code of Conduct.
+                  </p>
+                  <p className="ncoc-pledge-body">
+                    We are all adults. We accept all contributions.
+                    Nothing else matters.
+                  </p>
+                </div>
               </div>
             </section>
+
           </main>
 
-          {/* ── Footer ───────────────────────────────────────────────────── */}
-          <footer
-            style={{ borderTop: borderDefault, padding: "24px 0" }}
-          >
-            <div className="container-xl px-3 px-md-4 px-lg-5">
-              <Stack
-                direction="horizontal"
-                gap="normal"
-                align="center"
-                justify="space-between"
-                wrap="wrap"
-              >
-                <Text weight="semibold" style={{ color: fgDefault }}>
-                  No Code of Conduct
-                </Text>
-                <Text
-                  style={{ color: fgMuted, fontSize: "0.75rem" }}
-                >
-                  {siteConfig.footerNote}
-                </Text>
-              </Stack>
+          {/* ── Footer ──────────────────────────────────────────────────── */}
+          <footer style={{ borderTop: border, padding: "20px 0" }}>
+            <div className="container-xl px-3 px-md-4 px-lg-5" style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "0.75rem",
+            }}>
+              <span style={{ fontWeight: 600, color: fg, fontSize: "0.875rem" }}>
+                No Code of Conduct
+              </span>
+              <span style={{ color: fgMuted, fontSize: "0.75rem" }}>
+                {siteConfig.footerNote}
+              </span>
             </div>
           </footer>
+
         </div>
       </BaseStyles>
     </ThemeProvider>
