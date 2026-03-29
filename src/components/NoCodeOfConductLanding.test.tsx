@@ -1,84 +1,109 @@
 /// <reference lib="dom" />
 
 import { describe, expect, test } from "bun:test";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, getAllByText } from "@testing-library/react";
 
 import { siteConfig } from "../config/site";
 import NoCodeOfConductLanding from "./NoCodeOfConductLanding";
 
-const articles: Array<[title: string, description: string]> = [
-  [
-    "Assume competence",
-    "Start from peerhood, not suspicion. Adults deserve context, candor, and room to correct course.",
-  ],
-  [
-    "Speak plainly",
-    "Name technical and interpersonal problems directly. Vague politeness is usually deferred conflict wearing makeup.",
-  ],
-  [
-    "Repair quickly",
-    "When someone crosses a line, respond quickly, proportionally, and in a way that keeps repair available.",
-  ],
-  [
-    "Share stewardship",
-    "Everyone helps protect the codebase, the working relationship, and the conditions that keep serious work possible.",
-  ],
-];
-
 describe("NoCodeOfConductLanding", () => {
-  test("renders the adult self-governance framing and footer copy", () => {
+  test("renders the main heading and hero content", () => {
     render(<NoCodeOfConductLanding />);
 
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "Keep the code of conduct. Lose the infantilizing theater.",
+        name: "No Code of Conduct",
       }),
     ).toBeTruthy();
     expect(
-      screen.getByRole("region", {
-        name: "Working agreement for adult self-governance",
-      }),
+      screen.getByText(
+        /Liberate your communities and projects from endless debates/,
+      ),
     ).toBeTruthy();
     expect(screen.getByText(siteConfig.footerNote)).toBeTruthy();
   });
 
-  test.each(articles)("renders the %s article", (title, description) => {
+  test("renders the intro section", () => {
     render(<NoCodeOfConductLanding />);
-
-    expect(screen.getByRole("heading", { level: 3, name: title })).toBeTruthy();
-    expect(screen.getByText(description)).toBeTruthy();
-  });
-
-  test("renders the compact code and section boundaries semantically", () => {
-    render(<NoCodeOfConductLanding />);
-
-    const governanceSheet = screen.getByRole("region", {
-      name: "Working agreement for adult self-governance",
-    });
 
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "Short enough to use in real life.",
+        name: /What if we simply agreed/,
       }),
     ).toBeTruthy();
     expect(
-      screen.getByRole("heading", {
-        level: 3,
-        name: "No symbolic adulthood.",
-      }),
+      screen.getByText(/No Code of Conduct is a fresh, practical approach/),
     ).toBeTruthy();
+  });
+
+  test("renders all three principles", () => {
+    render(<NoCodeOfConductLanding />);
+
     expect(
-      screen.getByRole("heading", {
-        level: 3,
-        name: "What a grown-up standard preserves.",
-      }),
-    ).toBeTruthy();
-    expect(
-      within(governanceSheet).getAllByText(
-        /say what the problem is|assume the other person can hear it|repair damage when it happens|protect the work and the relationship together/i,
+      screen.getByText(
+        /We are all adults, fully able to conduct frank, mature, and respectful discussions\./,
       ),
-    ).toHaveLength(4);
+    ).toBeTruthy();
+    expect(
+      screen.getByText(/We welcome every contribution on its merits\./),
+    ).toBeTruthy();
+    // "Nothing else matters." appears in both principles and the pledge
+    expect(
+      screen.getAllByText(/Nothing else matters\./).length,
+    ).toBeGreaterThanOrEqual(1);
+  });
+
+  test("renders the adopt and promote sections", () => {
+    render(<NoCodeOfConductLanding />);
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "How to Adopt No Code of Conduct",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "How to Promote This Approach",
+      }),
+    ).toBeTruthy();
+    // #NCoC appears as text in the paragraph and as a Label — use getAllByText
+    expect(screen.getAllByText(/#NCoC|NCoC/)).toBeTruthy();
+  });
+
+  test("renders the FAQ section with all questions", () => {
+    render(<NoCodeOfConductLanding />);
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Frequently Asked Questions",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(/Does this approach make me feel excluded\?/),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(/What if someone behaves inappropriately\?/),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(/Why not address individual emotions\?/),
+    ).toBeTruthy();
+  });
+
+  test("renders the closing pledge", () => {
+    render(<NoCodeOfConductLanding />);
+
+    expect(
+      screen.getByText(/This project adheres to No Code of Conduct\./),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        /We are all adults\. We accept all contributions\. Nothing else matters\./,
+      ),
+    ).toBeTruthy();
   });
 });

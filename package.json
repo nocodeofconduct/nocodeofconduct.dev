@@ -28,12 +28,14 @@
     "quality:ci": "bun ./scripts/quality.ts --ci"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.1.0",
     "@astrojs/react": "^5.0.1",
-    "antd": "^6.3.4",
+    "@primer/css": "^22.1.1",
+    "@primer/octicons-react": "^19.23.1",
+    "@primer/react": "^38.17.0",
     "astro": "^6.0.8",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "styled-components": "^6.3.12"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.8",
